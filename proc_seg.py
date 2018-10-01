@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import os
 
-path 			= os.getcwd()
+path 			= os.getcwd() + '\\images'
 files 			= os.listdir(path)
 
 original_p 		= path + '\\..\\preprocessing\\original'
@@ -19,7 +19,7 @@ opening_t 		= path + '\\..\\segmentation\\opening'
 closing_t 		= path + '\\..\\segmentation\\closing'
 edge_t  		= path + '\\..\\segmentation\\edge'
 
-# test this
+# test these
 MF_WINDOW 		= 5
 KERNEL 			= np.ones((5,5), np.uint8)
 
