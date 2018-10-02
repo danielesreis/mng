@@ -23,37 +23,45 @@ edge_t  		= path + '\\..\\segmentation\\edge'
 MF_WINDOW 		= 5
 KERNEL 			= np.ones((5,5), np.uint8)
 
-for file in files:
-	img = cv2.imread(file)
+def otsu_thresholding(img):
+	__, mask = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+	thr_img = cv2.bitwise_and(img, img, mask = mask)
+	return thr_img
 
-	cv2.imwrite(original_p		+ file, img)
-	__,thr_img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	cv2.imwrite(original_t		+ file, thr_img)
+def main():
 
-	filt_img = cv2.medianBlur(img, MF_WINDOW)
-	cv2.imwrite(median_p 		+ file, filt_img)
-	__,thr_img = cv2.threshold(filt_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	cv2.imwrite(median_t		+ file, thr_img)
+	for file in files:
+		# which flag?
+		img = cv2.imread(file, 0)
 
+		cv2.imwrite(original_p		+ file, img)
+		thr_img = otsu_thresholding(img)
+		cv2.imwrite(original_t		+ file, thr_img)
 
-	cv2.imwrite(deblurring_p 	+ file, filt_img)
-	__,thr_img = cv2.threshold(filt_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	cv2.imwrite(deblurring_t	+ file, thr_img)
-
-	filt_img = cv2.morphologyEx(img, cv2.MORPH_OPEN, KERNEL)
-	cv2.imwrite(opening_p 		+ file, filt_img)
-	__,thr_img = cv2.threshold(filt_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	cv2.imwrite(opening_t		+ file, thr_img)
-
-	filt_img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, KERNEL)
-	cv2.imwrite(closing_p 		+ file, filt_img)
-	__,thr_img = cv2.threshold(filt_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	cv2.imwrite(closing_t		+ file, thr_img)
+		filt_img = cv2.medianBlur(img, MF_WINDOW)
+		cv2.imwrite(median_p 		+ file, filt_img)
+		thr_img = otsu_thresholding(filt_img)
+		cv2.imwrite(median_t		+ file, thr_img)
 
 
-	cv2.imwrite(edge_p 			+ file, filt_img)
-	__,thr_img = cv2.threshold(filt_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	cv2.imwrite(edge_t			+ file, thr_img)
+		cv2.imwrite(deblurring_p 	+ file, filt_img)
+		thr_img = otsu_thresholding(filt_img)
+		cv2.imwrite(deblurring_t	+ file, thr_img)
+
+		filt_img = cv2.morphologyEx(img, cv2.MORPH_OPEN, KERNEL)
+		cv2.imwrite(opening_p 		+ file, filt_img)
+		thr_img = otsu_thresholding(filt_img)
+		cv2.imwrite(opening_t		+ file, thr_img)
+
+		filt_img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, KERNEL)
+		cv2.imwrite(closing_p 		+ file, filt_img)
+		thr_img = otsu_thresholding(filt_img)
+		cv2.imwrite(closing_t		+ file, thr_img)
 
 
+		cv2.imwrite(edge_p 			+ file, filt_img)
+		thr_img = otsu_thresholding(filt_img)
+		cv2.imwrite(edge_t			+ file, thr_img)
+
+main()
 
