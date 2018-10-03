@@ -1,13 +1,16 @@
 import numpy as np
 import cv2
 import os
+from _unsharp_mask import unsharp_mask
 
 path 			= os.getcwd() 
 files 			= os.listdir(path + '\\images')
 
 # test these
-MF_WINDOW 		= 5
+MF_WINDOW 		= 15
 KERNEL 			= np.ones((5,5), np.uint8)
+RADIUS 			= 1
+AMOUNT 			= 1
 
 def main():
 
@@ -29,8 +32,8 @@ def main():
 		filt_img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, KERNEL)
 		cv2.imwrite(dest_folder + 'closing\\' 		+ file, filt_img)
 
-
-		cv2.imwrite(dest_folder + 'edge\\' 			+ file, filt_img)
+		filt_img = unsharp_mask(img, radius = RADIUS, amount = AMOUNT)
+		cv2.imwrite(dest_folder + 'sharpening\\'	+ file, filt_img)
 
 main()
 
