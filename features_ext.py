@@ -1,5 +1,6 @@
 import pandas as pd
 import features as ft
+from segmentation import get_inverse_mask
 import cv2
 import os
 
@@ -20,7 +21,8 @@ for seg_folder in folders:
 
 	for img_name in img_names:
 		BGR_img 	= cv2.imread(img_name)
-		binary_img 	= cv2.imread(img_name, 0)
+		gray_img 	= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
+		binary_img 	= get_inverse_mask(gray_img)
 		
 		RGB_img 	= BGR_img[:,:,::-1]
 		HSV_img 	= cv2.cvtColor(RGB_img, cv2.COLOR_RGB2HSV)
