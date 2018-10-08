@@ -17,15 +17,17 @@ AMOUNT 			= 1
 # 	bg[bg != 0] = 255
 # 	return bg
 
-# def remove_shadow(img):
+def remove_shadow(img):
+	# this may change according to the mango
+	filtered_img = simple_thresholding(img, 100)
+
+	return filtered_img
 
 def main():
 
 	for file in files:
 		img 		= cv2.imread(file)
 		dest_folder = path + '\\preprocessing\\'
-
-		img = remove_shadow(img)
 
 		cv2.imwrite(dest_folder + 'original\\'		+ file, img)
 
