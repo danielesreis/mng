@@ -12,16 +12,20 @@ KERNEL 			= np.ones((5,5), np.uint8)
 RADIUS 			= 1
 AMOUNT 			= 1
 
-def remove_bg_noise(color_img, mask):
-	bg 			= cv2.bitwise_and(color_img, color_img, mask = mask)
-	bg[bg != 0] = 255
-	return bg
+# def remove_bg_noise(color_img, mask):
+# 	bg 			= cv2.bitwise_and(color_img, color_img, mask = mask)
+# 	bg[bg != 0] = 255
+# 	return bg
+
+# def remove_shadow(img):
 
 def main():
 
 	for file in files:
 		img 		= cv2.imread(file)
 		dest_folder = path + '\\preprocessing\\'
+
+		img = remove_shadow(img)
 
 		cv2.imwrite(dest_folder + 'original\\'		+ file, img)
 
