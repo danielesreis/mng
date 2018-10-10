@@ -191,13 +191,14 @@ def regions_mean_diffs(img, n_regions):
 	return region_diffs
 
 def box_counting_dimension(img):
-
+# https://stackoverflow.com/questions/44793221/python-fractal-box-count-fractal-dimension
 
 def correlation_dimension(img):
-
+# https://mathematica.stackexchange.com/questions/25984/how-can-i-calculate-the-correlation-dimension-and-or-the-lyapunov-exponent-of-a
 
 def dilation_dimension(img):
-
+# https://sci-hub.tw/10.1016/s0165-0270(96)00080-5
+# Fractal methods and results in cellular morphology - dimensions, lacunarity and multifractals
 
 def estimated_area(gray_img):
 	return len(gray_img[gray_img == 255])
