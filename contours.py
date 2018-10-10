@@ -10,10 +10,14 @@ def get_contours(color_img):
 
 def get_bounding_box(img, contours):
 
-	# This may change according to preprocessing
-	# Consider changing it to something more sophisticated, e.g.: checking width and height and choosing an appropriate contour
-	contour 		= contours[34]
-	(x, y, w, h) 	= cv2.boundingRect(contour)
+	for contour in countours:
+		(x,y,w,h) = cv2.boundingRect(contour)
+		if h > 1500 and w > 800:
+			box_contour = contour
+			break
+
+	# box_contour	= contours[34]
+	(x, y, w, h) 	= cv2.boundingRect(box_contour)
 
 	min_x 			= x
 	max_x 			= x + w
