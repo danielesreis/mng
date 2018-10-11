@@ -190,21 +190,91 @@ def regions_mean_diffs(img, n_regions):
 
 	return region_diffs
 
-def box_counting_dimension(img):
-# https://stackoverflow.com/questions/44793221/python-fractal-box-count-fractal-dimension
+def box_counting_dimension(grayscale_img):
 
-def correlation_dimension(img):
-# https://mathematica.stackexchange.com/questions/25984/how-can-i-calculate-the-correlation-dimension-and-or-the-lyapunov-exponent-of-a
+	def box_count(grayscale_img, k):
+        img_sum = np.add.reduceat(
+            np.add.reduceat(grayscale_img, np.arange(0, grayscale_img.shape[0], k), axis=0),
+                               np.arange(0, grayscale_img.shape[1], k), axis=1)
 
-def dilation_dimension(img):
-# https://sci-hub.tw/10.1016/s0165-0270(96)00080-5
-# Fractal methods and results in cellular morphology - dimensions, lacunarity and multifractals
+        return len(np.where((img_sum > 0) & (img_sum < 255))[0])
 
-def estimated_area(gray_img):
-	return len(gray_img[gray_img == 255])
+    grayscale_img[grayscale_img != 255] = 0
 
-def estimated_diameter(gray_img):
-	area 		= estimated_area(gray_img)
+    # min_dim 	= min(grayscale_img.shape)
+    # n 			= 2**np.floor(np.log(min_dim)/np.log(2))
+    # n 			= int(np.log(n)/np.log(2))
+    n 			= 20
+
+    sizes 		= 2**np.arange(n, 1, -1)
+    counts 		= []
+    for size in sizes:
+        counts.append(box_count(grayscale_img, size))
+
+    coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)
+    return -coeffs[0]
+
+def correlation_dimension(grayscale_img):
+	grayscale_img[grayscale_img != 255] = 0
+
+	height, width, __ 	= grayscale_img.shape
+	n_pixels 			= height * width
+
+	def heaviside_func(threshold, value):
+		return int(value - threshold > 0)
+
+	def x_ind(val):
+		return int(np.ceil(val)/width)-1
+
+	def y_ind(val):
+		y_ind = val%width-1 if val%width>0 else width
+
+	diff 		= 5
+	sizes 		= np.arange(255, 0, -diff)
+	sum_pixel 	= np.zeros(sizes.shape[0])
+
+	num_it 		= 1
+	for size in sizes:
+		for i in range(n_pixels):
+			for j in range(n_pixels):
+				x_i = x_ind(i+1)
+				y_i = y_ind(i+1)
+				x_j = x_ind(j+1)
+				y_j = y_ind(j+1)
+				sum_pixel = sum_pixel + heaviside_func(size, grayscale_img[y_i,x_i]-grayscale_img[y_j,x_j])
+
+		sum_pixel[num_it-1] = sum_pixel[num_it-1]/(n_pixels*n_pixels)
+		num_it 				= num_it + 1
+
+	coeffs = np.polyfit(np.log(sum_pixel), np.log(sizes), 1)
+
+	return -coeffs[0]
+
+def dilation_dimension(grayscale_img):
+	grayscale_img[grayscale_img != 255] = 0
+
+	kernel = np.array([	[0, 0, 0, 0, 1, 0, 0, 0, 0], \
+						[0, 0, 0, 1, 1, 1, 0, 0, 0], \
+						[0, 0, 1, 1, 1, 1, 1, 0, 0], \
+						[0, 0, 0, 1, 1, 1, 0, 0, 0], \
+						[0, 0, 0, 0, 1, 0, 0, 0, 0]])
+
+	# kernels = 
+	# diameters = 
+	results	= [cv2.filter2D(grayscale_img, -1, kernel) for kernel in kernels]
+	sums 	= [sum(sum(result)) for result in results]
+	L 		= [summ/diameter for summ, diameter in zip(sums, diameters)]
+
+	coeffs = np.polyfit(np.log(L), np.log(1/diameters), 1)
+
+	return -coeffs[0]
+
+
+def estimated_area(grayscale_img):
+	return len(grayscale_img[grayscale_img == 255])
+
+def estimated_diameter(grayscale_img):
+	area 		= estimated_area(grayscale_img)
 	diameter 	= math.sqrt(area * 4 / math.pi)
 
 	return diameter

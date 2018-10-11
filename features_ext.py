@@ -30,13 +30,12 @@ for seg_folder in folders:
 
 	for img_name in img_names:
 		BGR_img 	= cv2.imread(img_name)
-		gray_img 	= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
+		grayscale_img 	= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
 				
 		RGB_img 	= BGR_img[:,:,::-1]
 		HSV_img 	= cv2.cvtColor(RGB_img, cv2.COLOR_RGB2HSV)
 		#check this
 		Lab_img 	= cv2.cvtColor(RGB_img, cv2.COLOR_RGB2Lab)
-
 
 		mean_R, mean_G, mean_B 								= ft.channels_mean(RGB_img)
 		mean_H, mean_S, mean_B 								= ft.channels_mean(HSV_img)
@@ -68,14 +67,13 @@ for seg_folder in folders:
 		n_regions_means										= ft.regions_mean(RGB_img, n_regions)
 		n_regions_means_diffs								= ft.regions_mean_diffs(RGB_img, n_regions)
 
-		bcd  												= ft.box_counting_dimension(RGB_img)
-		cd  												= ft.correlation_dimension(RGB_img)
-		dd  												= ft.dilation_dimension(RGB_img)
+		bcd  												= ft.box_counting_dimension(grayscale_img)
+		cd  												= ft.correlation_dimension(grayscale_img)
+		dd  												= ft.dilation_dimension(grayscale_img)
 
-		area												= ft.estimated_area(gray_img)
-		diameter											= ft.estimated_diameter(gray_img)
+		area												= ft.estimated_area(grayscale_img)
+		diameter											= ft.estimated_diameter(grayscale_img)
 
-		# should I append each variable to a list instead? 
 		# feature_values	= [ mean_R, mean_G, mean_B, mean_H, mean_S, mean_V, mean_L, mean_a, mean_b, RG_rate, RB_rate, \
 		# 					SH_rate, dominant_HSV, RG_diff, RB_diff, GB_diff, apex_mean_R, apex_mean_G, apex_mean_B, \
 		# 					equator_mean_R, equator_mean_G, equator_mean_B, stalk_mean_R, stalk_mean_G, stalk_mean_B, \
