@@ -13,12 +13,12 @@ folder 			= path + '\\images\\'
 img_names 		= os.listdir(folder)
 proc_folders 	= ['original\\', 'median\\', 'deblurring\\', 'opening\\', 'closing\\', 'sharpening\\']
 
-MNG 		= MNG(path)
+MNG = MNG(path, img_names)
 
 # get folder and index
 for proc_folder in proc_folders:
 
-	MNG.features.delete_rows()
+	MNG.features.new_df()
 	func = get_processing_func(proc_folder)
 
 	for img_name in img_names:
@@ -29,9 +29,9 @@ for proc_folder in proc_folders:
 		# else:
 		# 	filt_img = BGR_img 
 
-		filt_img 	= MNG.segmentation.otsu_thresholding(filt_img)
-		filt_img 	= MNG.preprocessing.remove_shadow(filt_img)
-		filt_img 	= MNG.contour.cut_image(ori_img)
+		seg_img 	= MNG.segmentation.otsu_thresholding(filt_img)
+		seg_img 	= MNG.preprocessing.remove_shadow(filt_img)
+		seg_img 	= MNG.contour.cut_image(ori_img)
 		seg_img 	= MNG.preprocessing.rotate(filt_img)
 
 		MNG.save_image(img_name, filt_img, path + '\\preprocessing\\' + proc_folder)

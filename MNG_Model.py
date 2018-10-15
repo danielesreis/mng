@@ -5,21 +5,21 @@ import pandas as pd
 import math
 import os
 
-def MNG_Model():
+class MNG_Model():
 
 	def __init__(self, folder):
 		self.dest_folder = folder + '..results\\'
 
-	# def save_results(file, r2, rmse):
+	# def save_results(self, file, r2, rmse):
 
-	def read_data(file):
+	def read_data(self, file):
 		data = pd.read_csv(file, sep=';')	
 		X_train 	= data[1:n_cols - 1]
 		Y_train 	= data['target']
 
 		return X_train, Y_train
 
-	def build_rf_model(file, n_trees=100):
+	def build_rf_model(self, file, n_trees=100):
 		X_train, Y_train = read_data(file)
 	
 		# n_cols 		= len(data.columns)
@@ -35,7 +35,7 @@ def MNG_Model():
 		# rmse = rmse_score.mean()
 		save_results(file, r2, rmse)
 
-	def build_mlr_model(file):
+	def build_mlr_model(self, file):
 
 		# for i in range(n_cols - 2):
 

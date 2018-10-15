@@ -5,27 +5,39 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 
-def MNG_Features():
+class MNG_Features():
 
-	# data = pd.DataFrame(columns = feature_names)
-	# feature_names = 
+	feature_names	= [ 'mean_R', 'mean_G', 'mean_B', 'mean_H', 'mean_S', 'mean_V', 'mean_L', 'mean_a', 'mean_b', 'RG_rate', 'RB_rate', \
+					'SH_rate', 'dominant_HSV', 'RG_diff', 'RB_diff', 'GB_diff', 'apex_mean_R', 'apex_mean_G', 'apex_mean_B', \
+					'equator_mean_R', 'equator_mean_G', 'equator_mean_B', 'stalk_mean_R', 'stalk_mean_G', 'stalk_mean_B', \
+					'apex_mean_H', 'apex_mean_S', 'apex_mean_V', 'equator_mean_H', 'equator_mean_S', 'equator_mean_V', 'stalk_mean_H', \
+					'stalk_mean_S', 'stalk_mean_V', 'apex_mean_L', 'apex_mean_a', 'apex_mean_b', 'equator_mean_L', 'equator_mean_a', \
+					'equator_mean_b', 'stalk_mean_L', 'stalk_mean_a', 'stalk_mean_b', 'long_gradient_R', 'long_gradient_G', \
+					'long_gradient_B', 'apex_equator_R_diff', 'equator_stalk_R_diff', 'apex_stalk_R_diff', 'apex_equator_G_diff', \
+					'equator_stalk_G_diff', 'apex_stalk_G_diff', 'apex_equator_B_diff', 'equator_stalk_B_diff', 'apex_stalk_B_diff', \
+					'apex_equator_H_diff', 'equator_stalk_H_diff', 'apex_stalk_H_diff', 'apex_equator_S_diff', 'equator_stalk_S_diff', \
+					'apex_stalk_S_diff', 'apex_equator_V_diff', 'equator_stalk_V_diff', 'apex_stalk_V_diff', 'apex_equator_L_diff', \
+					'equator_stalk_L_diff', 'apex_stalk_L_diff', 'apex_equator_a_diff', 'equator_stalk_a_diff', 'apex_stalk_a_diff', \
+					'apex_equator_b_diff', 'equator_stalk_b_diff', 'apex_stalk_b_diff', 'bcd', 'cd', 'dd', 'area', 'diameter']
 
-	def __init__(self, folder):
-		self.dest_folder = folder + '..\\features\\'
+	def __init__(self, folder, image_names):
+		self.dest_folder 	= folder + '..\\features\\'
+		self.image_names	= image_names
+		self.data 			= new_df()
 
-	# def delete_rows():
-	# 	delete rows of dataframe
+	def new_df(self):
+		self.data = pd.DataFrame(index=self.image_names, columns=self.feature_names)
 
-	def insert_feature_row(img_name, feature_values):
-		feature_row = pd.Series(data=feature_values, index=feature_names, name=img_name)
-		data 		= data.append(feature_row)
+	def insert_feature_row(self, img_name, feature_values):
+		feature_row = pd.Series(data=feature_values, index=self.feature_names, name=img_name)
+		self.data 	= self.data.append(feature_row)
 
-	def save_data(subfolder):
-		file_path = dest_folder + subfolder + '.csv'
+	def save_data(self, subfolder):
+		file_path = self.dest_folder + subfolder + '.csv'
 		data.to_csv(file_path, sep=';')
 		return file_path
 
-	def extract_features(BGR_img, img_name):
+	def extract_features(self, BGR_img, img_name):
 		
 		grayscale_img 	= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
 				
@@ -71,23 +83,35 @@ def MNG_Features():
 		area												= ft.estimated_area(grayscale_img)
 		diameter											= ft.estimated_diameter(grayscale_img)
 
-		# append to list?
-		# feature_Values = 
+		feature_values	= [ mean_R, mean_G, mean_B, mean_H, mean_S, mean_V, mean_L, mean_a, mean_b, RG_rate, RB_rate, \
+							SH_rate, dominant_HSV, RG_diff, RB_diff, GB_diff, apex_mean_R, apex_mean_G, apex_mean_B, \
+							equator_mean_R, equator_mean_G, equator_mean_B, stalk_mean_R, stalk_mean_G, stalk_mean_B, \
+							apex_mean_H, apex_mean_S, apex_mean_V, equator_mean_H, equator_mean_S, equator_mean_V, stalk_mean_H,\
+							stalk_mean_S, stalk_mean_V, apex_mean_L, apex_mean_a, apex_mean_b, equator_mean_L, equator_mean_a, \
+							equator_mean_b, stalk_mean_L, stalk_mean_a, stalk_mean_b, long_gradient_R, long_gradient_G, long_gradient_B, \
+							regions_diffs_RGB[0], regions_diffs_RGB[1], regions_diffs_RGB[2], regions_diffs_RGB[3], \
+							regions_diffs_RGB[4], regions_diffs_RGB[5], regions_diffs_RGB[6], regions_diffs_RGB[7], \
+							regions_diffs_RGB[8], regions_diffs_HSV[0], regions_diffs_HSV[1], regions_diffs_HSV[2], \
+							regions_diffs_HSV[3], regions_diffs_HSV[4], regions_diffs_HSV[5], regions_diffs_HSV[6], \
+							regions_diffs_HSV[7], regions_diffs_HSV[8], regions_diffs_Lab[0], regions_diffs_Lab[1], \
+							regions_diffs_Lab[2], regions_diffs_Lab[3], regions_diffs_Lab[4], regions_diffs_Lab[5], \
+							regions_diffs_Lab[6], regions_diffs_Lab[7], regions_diffs_Lab[8], \
+							bcd, cd, dd, n_pixels, area, diameter]
 		insert_feature_row(img_name, feature_values)
 
-	def channels_mean(img):
+	def channels_mean(self, img):
 		mean_0 = img[:,:,0].mean()
 		mean_1 = img[:,:,1].mean()
 		mean_2 = img[:,:,2].mean()
 
 		return mean_0, mean_1, mean_2
 
-	def space_rates(img):
+	def space_rates(self, img):
 		mean_0, mean_1, mean_2 = channels_mean(img)
 
 		return mean_0/mean_1, mean_0/mean_2, mean_1/mean_2	
 
-	def dominant_HSV_color(img):
+	def dominant_HSV_color(self, img):
 		''' 0: red, 1: yellow, 2: green, 3: cyan, 4: blue, 5: magenta '''
 		hue, __, __ = channels_mean(img)
 		
@@ -106,12 +130,12 @@ def MNG_Features():
 		
 		return dominant_color
 
-	def space_diffs(img):
+	def space_diffs(self, img):
 		mean_0, mean_1, mean_2 = channels_mean(img)
 
 		return mean_0 - mean_1, mean_0 - mean_2, mean_1 - mean_2
 
-	def apex_means(img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
+	def apex_means(self, img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
 		height, width, __ 		= img.shape
 
 		y_c						= round(OFFSET_Y_apex_stalk * height)
@@ -131,7 +155,7 @@ def MNG_Features():
 
 		return mean_0, mean_1, mean_2
 
-	def equator_means(img, HEIGHT_FRACTION=0.05):
+	def equator_means(self, img, HEIGHT_FRACTION=0.05):
 		height, width, __ 		= img.shape
 
 		y_c						= round(height / 2)
@@ -151,7 +175,7 @@ def MNG_Features():
 
 		return mean_0, mean_1, mean_2
 
-	def stalk_means(img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
+	def stalk_means(self, img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
 		height, width, __ 		= img.shape
 
 		y_c						= height - round(OFFSET_Y_apex_stalk * height)
@@ -171,7 +195,7 @@ def MNG_Features():
 
 		return mean_0, mean_1, mean_2
 
-	def longitudinal_gradient(img, OFFSET_LONG=0.05, WIDTH_FRACTION=0.05):
+	def longitudinal_gradient(self, img, OFFSET_LONG=0.05, WIDTH_FRACTION=0.05):
 		height, width, __ 	= img.shape
 
 		y_i					= round(OFFSET_LONG * height)
@@ -201,7 +225,7 @@ def MNG_Features():
 
 		return gradient
 
-	def regions_mean_diffs(img):	
+	def regions_mean_diffs(self, img):	
 		apex_0, apex_1, apex_2 			= apex_means(img)
 		equator_0, equator_1, equator_2	= equator_means(img)
 		stalk_0, stalk_1, stalk_2 		= stalk_means(img)
@@ -212,7 +236,7 @@ def MNG_Features():
 
 		return region_diffs
 
-	def regions_mean(img, n_regions = 5):
+	def regions_mean(self, img, n_regions = 5):
 		height, width, __ 	= img.shape
 
 		slice_height 		= math.round(height / n_regions)
@@ -240,7 +264,7 @@ def MNG_Features():
 
 		return means
 
-	def regions_mean_diffs(img, n_regions = 5):	
+	def regions_mean_diffs(self, img, n_regions = 5):	
 		
 		means = region_mean(img, n_regions)
 
@@ -253,7 +277,7 @@ def MNG_Features():
 
 		return region_diffs
 
-	def box_counting_dimension(grayscale_img, n = 20):
+	def box_counting_dimension(self, grayscale_img, n = 20):
 
 		def box_count(grayscale_img, k):
 	        img_sum = np.add.reduceat(
@@ -276,7 +300,7 @@ def MNG_Features():
 	    coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)
 	    return -coeffs[0]
 
-	def correlation_dimension(grayscale_img):
+	def correlation_dimension(self, grayscale_img):
 		grayscale_img[grayscale_img != 255] = 0
 
 		height, width, __ 	= grayscale_img.shape
@@ -312,7 +336,7 @@ def MNG_Features():
 
 		return -coeffs[0]
 
-	def dilation_dimension(grayscale_img):
+	def dilation_dimension(self, grayscale_img):
 		grayscale_img[grayscale_img != 255] = 0
 
 		kernel = np.array([	[0, 0, 0, 0, 1, 0, 0, 0, 0], \
@@ -331,24 +355,23 @@ def MNG_Features():
 
 		return -coeffs[0]
 
-
-	def estimated_area(grayscale_img):
+	def estimated_area(self, grayscale_img):
 		return len(grayscale_img[grayscale_img == 255])
 
-	def estimated_diameter(grayscale_img):
+	def estimated_diameter(self, grayscale_img):
 		area 		= estimated_area(grayscale_img)
 		diameter 	= math.sqrt(area * 4 / math.pi)
 
 		return diameter
 
-	def first_nonwhite_pixel(img, known_point, axis):
+	def first_nonwhite_pixel(self, img, known_point, axis):
 		data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
-		i 		= np.where(data != 255)
+		i 		= np.where(data != 255)[0][0]
 
-		return i[0][0]
+		return i
 
-	def last_nonwhite_pixel(img, known_point, axis):
+	def last_nonwhite_pixel(self, img, known_point, axis):
 		data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
-		i 		= np.where(data != 255)
+		i 		= np.where(data != 255)[0][-1]
 
-		return i[0][-1]
+		return i
