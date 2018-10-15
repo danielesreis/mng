@@ -94,4 +94,3 @@ for seg_folder in folders:
 		data = data.append(feature_row)
 
 	data.to_csv(dest_folder + seg_folder + '.csv', sep = ';')
-
