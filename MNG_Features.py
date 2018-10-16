@@ -46,42 +46,42 @@ class MNG_Features():
 		#check this
 		Lab_img 		= cv2.cvtColor(RGB_img, cv2.COLOR_RGB2Lab)
 
-		mean_R, mean_G, mean_B 								= ft.channels_mean(RGB_img)
-		mean_H, mean_S, mean_B 								= ft.channels_mean(HSV_img)
-		mean_L, mean_a, mean_b 								= ft.channels_mean(Lab_img)
+		mean_R, mean_G, mean_B 								= self.channels_mean(RGB_img)
+		mean_H, mean_S, mean_B 								= self.channels_mean(HSV_img)
+		mean_L, mean_a, mean_b 								= self.channels_mean(Lab_img)
 
-		RG_rate, RB_rate, __ 								= ft.space_rates(RGB_img)
-		SH_rate, __, __ 									= ft.space_rates(HSV_img)
+		RG_rate, RB_rate, __ 								= self.space_rates(RGB_img)
+		SH_rate, __, __ 									= self.space_rates(HSV_img)
 
-		dominant_HSV										= ft.dominant_HSV_color(HSV_img)
+		dominant_HSV										= self.dominant_HSV_color(HSV_img)
 
-		RG_diff, RB_diff, GB_diff							= ft.space_diffs(RGB_img)
+		RG_diff, RB_diff, GB_diff							= self.space_diffs(RGB_img)
 
-		apex_mean_R, apex_mean_G, apex_mean_B 				= ft.apex_means(RGB_img)
-		equator_mean_R, equator_mean_G, equator_mean_B 		= ft.equator_means(RGB_img)
-		stalk_mean_R, stalk_mean_G, stalk_mean_B 			= ft.stalk_means(RGB_img)
-		apex_mean_H, apex_mean_S, apex_mean_V 				= ft.apex_means(HSV_img)
-		equator_mean_H, equator_mean_S, equator_mean_V 		= ft.equator_means(HSV_img)
-		stalk_mean_H, stalk_mean_S, stalk_mean_V 			= ft.stalk_means(HSV_img)
-		apex_mean_L, apex_mean_a, apex_mean_b 				= ft.apex_means(Lab_img)
-		equator_mean_L, equator_mean_a, equator_mean_b 		= ft.equator_means(Lab_img)
-		stalk_mean_L, stalk_mean_a, stalk_mean_b 			= ft.stalk_means(Lab_img)
+		apex_mean_R, apex_mean_G, apex_mean_B 				= self.apex_means(RGB_img)
+		equator_mean_R, equator_mean_G, equator_mean_B 		= self.equator_means(RGB_img)
+		stalk_mean_R, stalk_mean_G, stalk_mean_B 			= self.stalk_means(RGB_img)
+		apex_mean_H, apex_mean_S, apex_mean_V 				= self.apex_means(HSV_img)
+		equator_mean_H, equator_mean_S, equator_mean_V 		= self.equator_means(HSV_img)
+		stalk_mean_H, stalk_mean_S, stalk_mean_V 			= self.stalk_means(HSV_img)
+		apex_mean_L, apex_mean_a, apex_mean_b 				= self.apex_means(Lab_img)
+		equator_mean_L, equator_mean_a, equator_mean_b 		= self.equator_means(Lab_img)
+		stalk_mean_L, stalk_mean_a, stalk_mean_b 			= self.stalk_means(Lab_img)
 		
-		long_gradient_R, long_gradient_G, long_gradient_B 	= ft.longitudinal_gradient(RGB_img)
+		long_gradient_R, long_gradient_G, long_gradient_B 	= self.longitudinal_gradient(RGB_img)
 
-		regions_diffs_RGB									= ft.regions_mean_diffs(RGB_img)
-		regions_diffs_HSV									= ft.regions_mean_diffs(HSV_img)
-		regions_diffs_Lab									= ft.regions_mean_diffs(Lab_img)
+		regions_diffs_RGB									= self.regions_mean_diffs(RGB_img)
+		regions_diffs_HSV									= self.regions_mean_diffs(HSV_img)
+		regions_diffs_Lab									= self.regions_mean_diffs(Lab_img)
 
-		n_regions_means										= ft.regions_mean(RGB_img, n_regions)
-		n_regions_means_diffs								= ft.regions_mean_diffs(RGB_img, n_regions)
+		n_regions_means										= self.regions_mean(RGB_img, n_regions)
+		n_regions_means_diffs								= self.regions_mean_diffs(RGB_img, n_regions)
 
-		bcd  												= ft.box_counting_dimension(grayscale_img)
-		cd  												= ft.correlation_dimension(grayscale_img)
-		dd  												= ft.dilation_dimension(grayscale_img)
+		bcd  												= self.box_counting_dimension(grayscale_img)
+		cd  												= self.correlation_dimension(grayscale_img)
+		dd  												= self.dilation_dimension(grayscale_img)
 
-		area												= ft.estimated_area(grayscale_img)
-		diameter											= ft.estimated_diameter(grayscale_img)
+		area												= self.estimated_area(grayscale_img)
+		diameter											= self.estimated_diameter(grayscale_img)
 
 		feature_values	= [ mean_R, mean_G, mean_B, mean_H, mean_S, mean_V, mean_L, mean_a, mean_b, RG_rate, RB_rate, \
 							SH_rate, dominant_HSV, RG_diff, RB_diff, GB_diff, apex_mean_R, apex_mean_G, apex_mean_B, \
@@ -97,7 +97,7 @@ class MNG_Features():
 							regions_diffs_Lab[2], regions_diffs_Lab[3], regions_diffs_Lab[4], regions_diffs_Lab[5], \
 							regions_diffs_Lab[6], regions_diffs_Lab[7], regions_diffs_Lab[8], \
 							bcd, cd, dd, n_pixels, area, diameter]
-		insert_feature_row(img_name, feature_values)
+		self.insert_feature_row(img_name, feature_values)
 
 	def channels_mean(self, img):
 		mean_0 = img[:,:,0].mean()
@@ -107,13 +107,13 @@ class MNG_Features():
 		return mean_0, mean_1, mean_2
 
 	def space_rates(self, img):
-		mean_0, mean_1, mean_2 = channels_mean(img)
+		mean_0, mean_1, mean_2 = self.channels_mean(img)
 
 		return mean_0/mean_1, mean_0/mean_2, mean_1/mean_2	
 
 	def dominant_HSV_color(self, img):
 		''' 0: red, 1: yellow, 2: green, 3: cyan, 4: blue, 5: magenta '''
-		hue, __, __ = channels_mean(img)
+		hue, __, __ = self.channels_mean(img)
 		
 		if 15 <= hue < 45:
 			dominant_color = 1
@@ -131,7 +131,7 @@ class MNG_Features():
 		return dominant_color
 
 	def space_diffs(self, img):
-		mean_0, mean_1, mean_2 = channels_mean(img)
+		mean_0, mean_1, mean_2 = self.channels_mean(img)
 
 		return mean_0 - mean_1, mean_0 - mean_2, mean_1 - mean_2
 
@@ -143,12 +143,12 @@ class MNG_Features():
 		y_f						= y_c + slice_height
 		y_i						= y_c - slice_height
 
-		x_0						= first_nonwhite_pixel(img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(img, y_f, 'y')
+		x_0						= self.first_nonwhite_pixel(img, y_i, 'y')
+		x_1						= self.first_nonwhite_pixel(img, y_f, 'y')
 		x_i						= x_0 if x_0 > x_i else x_0
 
-		x_0						= last_nonwhite_pixel(img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(img, y_f, 'y')
+		x_0						= self.last_nonwhite_pixel(img, y_i, 'y')
+		x_1						= self.last_nonwhite_pixel(img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_i else x_0
 
 		mean_0, mean_1, mean_2 	= channels_mean(img[y_i:y_f, x_i:x_f])
@@ -163,12 +163,12 @@ class MNG_Features():
 		y_f						= y_c + slice_height
 		y_i						= y_c - slice_height
 
-		x_0						= first_nonwhite_pixel(img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(img, y_f, 'y')
+		x_0						= self.first_nonwhite_pixel(img, y_i, 'y')
+		x_1						= self.first_nonwhite_pixel(img, y_f, 'y')
 		x_i						= x_0 if x_0 > x_i else x_0
 
-		x_0						= last_nonwhite_pixel(img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(img, y_f, 'y')
+		x_0						= self.last_nonwhite_pixel(img, y_i, 'y')
+		x_1						= self.last_nonwhite_pixel(img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_i else x_0
 
 		mean_0, mean_1, mean_2 	= channels_mean(img[y_i:y_f, x_i:x_f])
@@ -183,12 +183,12 @@ class MNG_Features():
 		y_f						= y_c + slice_height
 		y_i						= y_c - slice_height
 		
-		x_0						= first_nonwhite_pixel(img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(img, y_f, 'y')
+		x_0						= self.first_nonwhite_pixel(img, y_i, 'y')
+		x_1						= self.first_nonwhite_pixel(img, y_f, 'y')
 		x_i						= x_0 if x_0 > x_i else x_0
 
-		x_0						= last_nonwhite_pixel(img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(img, y_f, 'y')
+		x_0						= self.last_nonwhite_pixel(img, y_i, 'y')
+		x_1						= self.last_nonwhite_pixel(img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_i else x_0
 
 		mean_0, mean_1, mean_2 	= channels_mean(img[y_i:y_f, x_i:x_f])
@@ -226,9 +226,9 @@ class MNG_Features():
 		return gradient
 
 	def regions_mean_diffs(self, img):	
-		apex_0, apex_1, apex_2 			= apex_means(img)
-		equator_0, equator_1, equator_2	= equator_means(img)
-		stalk_0, stalk_1, stalk_2 		= stalk_means(img)
+		apex_0, apex_1, apex_2 			= self.apex_means(img)
+		equator_0, equator_1, equator_2	= self.equator_means(img)
+		stalk_0, stalk_1, stalk_2 		= self.stalk_means(img)
 
 		region_diffs 					= np.array([apex_0 - equator_0, equator_0 - stalk_0, apex_0 - stalk_0 \
 													apex_1 - equator_1, equator_1 - stalk_1, apex_1 - stalk_1]\
@@ -247,15 +247,15 @@ class MNG_Features():
 			y_i 	= i * slice_height + skip
 			y_f 	= y_i + slice_height
 
-			x_0		= first_nonwhite_pixel(img, y_i, 'y')
-			x_1		= first_nonwhite_pixel(img, y_f, 'y')
+			x_0		= self.first_nonwhite_pixel(img, y_i, 'y')
+			x_1		= self.first_nonwhite_pixel(img, y_f, 'y')
 			x_i		= x_0 if x_0 > x_i else x_0
 
-			x_0		= last_nonwhite_pixel(img, y_i, 'y')
-			x_1		= last_nonwhite_pixel(img, y_f, 'y')
+			x_0		= self.last_nonwhite_pixel(img, y_i, 'y')
+			x_1		= self.last_nonwhite_pixel(img, y_f, 'y')
 			x_f		= x_0 if x_0 < x_i else x_0
 
-			mean_0, mean_1, mean_2 = channels_mean(img[y_i:y_f,x_i:x_f,:])
+			mean_0, mean_1, mean_2 = self.channels_mean(img[y_i:y_f,x_i:x_f,:])
 
 			if i == 0:
 				means = np.array([[mean_0, mean_1, mean_2]])
@@ -266,7 +266,7 @@ class MNG_Features():
 
 	def regions_mean_diffs(self, img, n_regions = 5):	
 		
-		means = region_mean(img, n_regions)
+		means = self.region_mean(img, n_regions)
 
 		for i in range(n_regions-1):
 			for j in range(n_regions-i-1):
@@ -359,7 +359,7 @@ class MNG_Features():
 		return len(grayscale_img[grayscale_img == 255])
 
 	def estimated_diameter(self, grayscale_img):
-		area 		= estimated_area(grayscale_img)
+		area 		= self.estimated_area(grayscale_img)
 		diameter 	= math.sqrt(area * 4 / math.pi)
 
 		return diameter

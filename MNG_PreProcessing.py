@@ -4,14 +4,12 @@ from _unsharp_mask import unsharp_mask
 
 class MNG_PreProcessing():
 
-	def __init__(self, folder):
-		self.dest_folder = folder + 'preprocessing\\'
-
-	# def rotate(self, img):
+	def __init__(self, segmentation):
+		self.segmentation 	= segmentation
 
 	def remove_shadow(self, img):
 		# this may change according to the mango
-		filt_img = simple_thresholding(img, 100)
+		filt_img = self.segmentation.simple_thresholding(img, 100)
 
 		return filt_img
 

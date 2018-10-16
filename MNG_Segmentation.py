@@ -2,9 +2,6 @@ import cv2
 
 class MNG_Segmentation():
 
-	def __init__(self, folder):
-		self.dest_folder = folder + 'segmentation\\'	
-
 	def simple_thresholding(self, color_img, threshold):
 		grayscale_img 			= cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
 		__, mask 				= cv2.threshold(grayscale_img, threshold, 255, cv2.THRESH_BINARY)

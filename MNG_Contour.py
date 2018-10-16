@@ -18,15 +18,16 @@ class MNG_Contour():
 		return contours
 
 	def get_bounding_box(self, img, contours):
+		img_h, img_w, __ = img.shape
 
 		for contour in countours:
 			(x,y,w,h) = cv2.boundingRect(contour)
-			if h > 1500 and w > 800:
+			
+			height_cond = h > 1500 and is not img_h
+			width_cond = w > 800 and is not img_w
+			if height_cond and width_cond:
 				box_contour = contour
 				break
-
-		# box_contour	= contours[34]
-		(x, y, w, h) 	= cv2.boundingRect(box_contour)
 
 		min_x 			= x
 		max_x 			= x + w

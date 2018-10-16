@@ -32,7 +32,6 @@ for proc_folder in proc_folders:
 		seg_img 	= MNG.segmentation.otsu_thresholding(filt_img)
 		seg_img 	= MNG.preprocessing.remove_shadow(filt_img)
 		seg_img 	= MNG.contour.cut_image(ori_img)
-		seg_img 	= MNG.preprocessing.rotate(filt_img)
 
 		MNG.save_image(img_name, filt_img, path + '\\preprocessing\\' + proc_folder)
 		MNG.save_image(img_name, seg_img, path + '\\segmentation\\' + proc_folder)

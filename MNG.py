@@ -10,8 +10,8 @@ class MNG():
 
 	def __init__(self, folder, n_images):
 		self.folder				= folder
-		self.preprocessing 		= MNG_PreProcessing(folder)
-		self.segmentation 		= MNG_Segmentation(folder)
+		self.segmentation 		= MNG_Segmentation()
+		self.preprocessing 		= MNG_PreProcessing(self.segmentation)
 		self.contour 			= MNG_Contour()
 		self.features 			= MNG_Features(folder, image_names)
 		self.model 				= MNG_Model(folder)
