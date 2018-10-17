@@ -1,6 +1,6 @@
 import cv2
 
-class MNG_Segmentation():
+class MNGSegmentation():
 
 	def simple_thresholding(self, color_img, threshold):
 		grayscale_img 			= cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)

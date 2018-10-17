@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-class MNG_Contour():
+class MNGContour():
 
 	def cut_image(self, color_img):
 		contours 	= get_contours(color_img)

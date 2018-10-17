@@ -1,8 +1,8 @@
-import MNG_PreProcessing
-import MNG_Segmentation
-import MNG_Contour
-import MNG_Features
-import MNG_Model
+import MNGPreProcessing
+import MNGSegmentation
+import MNGContour
+import MNGFeatures
+import MNGModel
 
 import cv2
 
@@ -10,11 +10,11 @@ class MNG():
 
 	def __init__(self, folder, n_images):
 		self.folder				= folder
-		self.segmentation 		= MNG_Segmentation()
-		self.preprocessing 		= MNG_PreProcessing(self.segmentation)
-		self.contour 			= MNG_Contour()
-		self.features 			= MNG_Features(folder, image_names)
-		self.model 				= MNG_Model(folder)
+		self.segmentation 		= MNGSegmentation()
+		self.preprocessing 		= MNGPreProcessing(self.segmentation)
+		self.contour 			= MNGContour()
+		self.features 			= MNGFeatures(folder, image_names)
+		self.model 				= MNGModel(folder)
 
 	def save_image(self, img_name, img, dest_folder):
 		cv2.imwrite(dest.folder + img_name, img)

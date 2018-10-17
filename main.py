@@ -1,8 +1,3 @@
-import MNG_PreProcessing
-import MNG_Segmentation
-import MNG_Contour
-import MNG_Features
-import MNG_Model
 import MNG
 
 import os
@@ -15,7 +10,6 @@ proc_folders 	= ['original\\', 'median\\', 'deblurring\\', 'opening\\', 'closing
 
 MNG = MNG(path, img_names)
 
-# get folder and index
 for proc_folder in proc_folders:
 
 	MNG.features.new_df()
@@ -23,11 +17,9 @@ for proc_folder in proc_folders:
 
 	for img_name in img_names:
 		BGR_img = cv2.imread(img_name)
-		# # compare to nonetype
-		# if type(func) is not:
-		# 	filt_img = func(BGR_img)
-		# else:
-		# 	filt_img = BGR_img 
+
+		# build model for original images too
+		filt_img = func(BGR_img)
 
 		seg_img 	= MNG.segmentation.otsu_thresholding(filt_img)
 		seg_img 	= MNG.preprocessing.remove_shadow(filt_img)
@@ -38,25 +30,22 @@ for proc_folder in proc_folders:
 
 		MNG.features.extract_features(seg_img, img_name)
 
-	features = MNG.features.save_data(proc_folder)
-	MNG.model.build_rf_model(features)
-	MNG.model.build_mlr_model(features)
+	file_path = MNG.features.save_data(proc_folder)
+	# get sst values
+	MNG.model.build_rf_model(file_path, proc_folder)
+	# divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe
+	MNG.model.build_mlr_model(file_path, proc_folder)
 
-# def get_processing_func(preprocessing_name):
-# 	if preprocessing_name if 'original\\' :
-# 		return 
-# 	elif preprocessing_name if 'median\\':
-# 		return MNG.preprocessing.median_filter
-# 	elif preprocessing_name if 'deblurring\\':
-# 		return MNG.preprocessing.deblurring
-# 	elif preprocessing_name if 'opening\\':
-# 		return MNG.preprocessing.opening_operation
-# 	elif preprocessing_name if 'closing\\':
-# 		return MNG.preprocessing.closing_operation
-# 	elif preprocessing_name if 'sharpening\\':
-# 		return MNG.preprocessing.unsharp_masking
-
-
-
-
-
+def get_processing_func(preprocessing_name):
+	if preprocessing_name == 'original\\' :
+		return -1
+	elif preprocessing_name == 'median\\':
+		return MNG.preprocessing.median_filter
+	elif preprocessing_name == 'deblurring\\':
+		return MNG.preprocessing.deblurring
+	elif preprocessing_name == 'opening\\':
+		return MNG.preprocessing.opening_operation
+	elif preprocessing_name == 'closing\\':
+		return MNG.preprocessing.closing_operation
+	elif preprocessing_name == 'sharpening\\':
+		return MNG.preprocessing.unsharp_masking

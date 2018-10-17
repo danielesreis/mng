@@ -2,10 +2,10 @@ import numpy as np
 import cv2
 from _unsharp_mask import unsharp_mask
 
-class MNG_PreProcessing():
+class MNGPreProcessing():
 
 	def __init__(self, segmentation):
-		self.segmentation 	= segmentation
+		self.segmentation = segmentation
 
 	def remove_shadow(self, img):
 		# this may change according to the mango
