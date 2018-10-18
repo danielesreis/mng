@@ -6,7 +6,8 @@ import cv2
 path 			= os.getcwd()
 folder 			= path + '\\images\\'
 img_names 		= os.listdir(folder)
-proc_folders 	= ['original\\', 'median\\', 'deblurring\\', 'opening\\', 'closing\\', 'sharpening\\']
+# proc_folders 	= ['original\\', 'median\\', 'deblurring\\', 'opening\\', 'closing\\', 'sharpening\\']
+proc_folders 	= ['median\\', 'deblurring\\', 'opening\\', 'closing\\', 'sharpening\\']
 
 MNG = MNG(path, img_names)
 
@@ -37,12 +38,12 @@ for proc_folder in proc_folders:
 	MNG.model.build_mlr_model(file_path, proc_folder)
 
 def get_processing_func(preprocessing_name):
-	if preprocessing_name == 'original\\' :
+	if preprocessing_name == 'original\\':
 		return -1
 	elif preprocessing_name == 'median\\':
 		return MNG.preprocessing.median_filter
 	elif preprocessing_name == 'deblurring\\':
-		return MNG.preprocessing.deblurring
+		return MNG.preprocessing.deblurring_filter
 	elif preprocessing_name == 'opening\\':
 		return MNG.preprocessing.opening_operation
 	elif preprocessing_name == 'closing\\':

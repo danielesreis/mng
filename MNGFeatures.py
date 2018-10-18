@@ -35,8 +35,8 @@ class MNGFeatures():
 		self.features_size 		= MNGFeaturesSize()
 		self.features_dominant	= MNGFeaturesDominantColor(self.features_means)
 		self.features_rates		= MNGFeaturesRates(self.features_means)
-		self.features_regions	= MNGFeaturesRegions(self.features_means, 5)
 		self.features_gradient	= MNGFeaturesGradient()
+		self.features_regions	= MNGFeaturesRegions(self.features_means, 5)
 		self.features_fractal	= MNGFeaturesFractal()
 		self.edit_feature_names()
 
@@ -79,6 +79,7 @@ class MNGFeatures():
 		means_diffs_full 		= self.features_regions.mean_diffs(RGB_img, 1)
 
 		means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
+		
 		mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
 		means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
