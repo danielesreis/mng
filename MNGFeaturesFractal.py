@@ -37,13 +37,14 @@ class MNGFeaturesFractal():
 		n_pixels 			= data.shape[0]
 		data_shifted 		= data[1:]
 		data 				= data[0:n_pixels-1]
+		data_subtracted		= data - data_shifteda
 
 		dists = np.linspace(0.1, 1, 5)
 
 		C = []
 		for dist in dists:
-			sum_pixel = heaviside_func(data - data_shifted, dist)
-			C.append(sum_pixel/n_pixels)
+			sum_pixel = heaviside_func(data_subtracted, dist)
+			C.append(sum_pixel/(n_pixels*n_pixels))
 
 		coeffs = np.polyfit(np.log(C), np.log(dists), 1)
 		return -coeffs[0]
