@@ -53,10 +53,11 @@ class MNGFeatures():
 		return file_path
 
 	def extract_features(self, BGR_img, img_name):
-		gray_img 		= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
-		RGB_img 		= BGR_img[:,:,::-1]
-		HSV_img 		= cv2.cvtColor(RGB_img, cv2.COLOR_RGB2HSV)
-		Lab_img 		= cv2.cvtColor(RGB_img, cv2.COLOR_RGB2Lab)
+		gray_img= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
+		
+		RGB_img = BGR_img[:,:,::-1]
+		HSV_img = cv2.cvtColor(RGB_img, cv2.COLOR_RGB2HSV)
+		Lab_img = cv2.cvtColor(RGB_img, cv2.COLOR_RGB2Lab)
 
 		means_RGB 				= self.features_means.channels_mean(RGB_img)
 		means_HSV 				= self.features_means.channels_mean(HSV_img)
@@ -79,7 +80,6 @@ class MNGFeatures():
 		means_diffs_full 		= self.features_regions.mean_diffs(RGB_img, 1)
 
 		means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
-		
 		mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
 		means_n_RGB				= self.features_regions.regions_means(RGB_img, n)

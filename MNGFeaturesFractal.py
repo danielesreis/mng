@@ -30,39 +30,22 @@ class MNGFeaturesFractal():
 
 	def correlation_dimension(self, gray_img):
 
-		def heaviside_func(threshold, value):
-			return int(value-threshold>0)
+		def heaviside_func(array, threshold):
+			return sum(array-threshold>=0)
 
-		def x_ind(val):
-			return int(np.ceil(val)/width)-1
+		data 				= gray_img.flatten()
+		n_pixels 			= data.shape[0]
+		data_shifted 		= data[1:]
+		data 				= data[0:n_pixels-1]
 
-		def y_ind(val):
-			y_ind = val%width-1 if val%width>0 else width
+		dists = np.linspace(0.1, 1, 5)
 
-		gray_img[gray_img!=255] = 0
+		C = []
+		for dist in dists:
+			sum_pixel = heaviside_func(data - data_shifted, dist)
+			C.append(sum_pixel/n_pixels)
 
-		height, width, __ 	= gray_img.shape
-		n_pixels 			= height * width
-
-		diff 		= 5
-		sizes 		= np.arange(255, 0, -diff)
-		sum_pixel 	= np.zeros(sizes.shape[0])
-
-		num_it 		= 1
-		for size in sizes:
-			for i in range(n_pixels):
-				for j in range(n_pixels):
-					x_i = x_ind(i+1)
-					y_i = y_ind(i+1)
-					x_j = x_ind(j+1)
-					y_j = y_ind(j+1)
-					sum_pixel = sum_pixel + heaviside_func(size, gray_img[y_i,x_i]-gray_img[y_j,x_j])
-
-			sum_pixel[num_it-1] = sum_pixel[num_it-1]/(n_pixels*n_pixels)
-			num_it 				= num_it + 1
-
-		coeffs = np.polyfit(np.log(sum_pixel), np.log(sizes), 1)
-
+		coeffs = np.polyfit(np.log(C), np.log(dists), 1)
 		return -coeffs[0]
 
 	def dilation_dimension(self, gray_img):
