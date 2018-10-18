@@ -1,6 +1,7 @@
 import numpy as np
 
 class MNGFeaturesMeans():
+	
 	def channels_mean(self, img):
 		mean_0 	= img[:,:,0].mean()
 		mean_1 	= img[:,:,1].mean()

@@ -6,7 +6,6 @@ from sklearn.linear_model import LinearRegression
 class MNGFeaturesGradient():
 
 	def longitudinal_gradient(self, img, OFFSET_LONG=0.05, WIDTH_FRACTION=0.05):
-		height, width, __ 	= img.shape
 
 		def first_last_y(height):
 			y_i	= round(OFFSET_LONG * height)
@@ -26,6 +25,8 @@ class MNGFeaturesGradient():
 			Y 	= [data[:,i] for i in range(3)]
 			return X, Y
 				
+		height, width, __ 	= img.shape
+		
 		y_i, y_f 	= first_last_y(height)
 		x_i, x_f 	= first_last_x(width)
 		l_slice		= img[y_i:y_f,x_i:x_f,:]

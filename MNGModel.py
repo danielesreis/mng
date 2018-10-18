@@ -1,6 +1,7 @@
 from sklearn.ensemble import RandomForestRegressor
-# from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_scor
+
 import pandas as pd
 import math
 import os

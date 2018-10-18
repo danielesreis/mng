@@ -1,7 +1,7 @@
-import MNG
-
 import os
 import cv2
+import MNG
+
 
 path 			= os.getcwd()
 folder 			= path + '\\images\\'

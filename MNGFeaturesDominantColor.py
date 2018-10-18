@@ -5,7 +5,8 @@ class MNGFeaturesDominantColor():
 
 	def dominant_HSV_color(self, img):
 	''' 0: red, 1: yellow, 2: green, 3: cyan, 4: blue, 5: magenta '''
-	hue, __, __ = self.features_means.channels_mean(img)	
+	means 	= self.features_means.channels_mean(img)	
+	hue 	= means[0]
 
 	if 15 <= hue < 45:
 		dominant_color = 1

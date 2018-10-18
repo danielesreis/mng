@@ -20,7 +20,7 @@ class MNGFeaturesRegions():
 			return i
 
 		height, width, __ 	= img.shape
-		slice_height 		= math.round(height/n)
+		slice_height 		= math.round(height/self.n)
 
 		for i in range(self.n):
 			skip 	= 1 if i > 0 else 0
@@ -36,14 +36,14 @@ class MNGFeaturesRegions():
 			x_1		= last_nonwhite_pixel(img, y_f, 'y')
 			x_f		= x_0 if x_0 < x_i else x_0
 
-			mean_0, mean_1, mean_2 = self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
+			means = self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
 
 			if i == 0:
-				means = np.array([[mean_0, mean_1, mean_2]])
+				reg_means = np.array([[mean[0], mean[1], mean[2]]])
 			else:
-				means = np.append(means, [[mean_0, mean_1, mean_2]], axis=0)
+				reg_means = np.append(reg_means, [[mean[0], mean[1], mean[2]]], axis=0)
 
-		return means
+		return reg_means
 
 	def regions_mean_diffs(self, img):	
 		means = self.regions_means(img, self.n)
@@ -60,8 +60,8 @@ class MNGFeaturesRegions():
 	def mean_diffs(self, img):
 
 		if self.n == 1:
-			mean_0, mean_1, mean_2 = self.feature_means.channels_mean(img)
-			diffs = np.array([mean_0-mean_1, mean_0-mean_2, mean_1-mean_2])
+			means = self.feature_means.channels_mean(img)
+			diffs = np.array([mean[0]-mean[1], mean[0]-mean[2], mean[1]-mean[2]])
 
 		else:
 			diffs = self.regions_mean_diffs(img, self.n)
@@ -95,8 +95,8 @@ class MNGFeaturesRegions():
 		x_1						= last_nonwhite_pixel(img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_i else x_0
 
-		mean_0, mean_1, mean_2 	= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
-		mean_apex = np.array([mean_0, mean_1, mean_2])
+		means 		= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
+		mean_apex 	= np.array([mean[0], mean[1], mean[2]])
 
 		return mean_apex
 
@@ -127,8 +127,8 @@ class MNGFeaturesRegions():
 		x_1						= last_nonwhite_pixel(img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_i else x_0
 
-		mean_0, mean_1, mean_2 	= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
-		mean_equator = np.array([mean_0, mean_1, mean_2])
+		means 			= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
+		mean_equator	= np.array([mean[0], mean[1], mean[2]])
 
 		return mean_equator
 
@@ -159,8 +159,8 @@ class MNGFeaturesRegions():
 		x_1						= last_nonwhite_pixel(img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_i else x_0
 
-		mean_0, mean_1, mean_2 	= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
-		mean_stalk = np.array([mean_0, mean_1, mean_2])
+		means 		= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
+		mean_stalk 	= np.array([mean[0], mean[1], mean[2]])
 
 		return mean_stalk
 

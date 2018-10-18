@@ -1,10 +1,10 @@
+import cv2
 import MNGPreProcessing
 import MNGSegmentation
 import MNGContour
 import MNGFeatures
 import MNGModel
 
-import cv2
 
 class MNG(): 
 
@@ -18,7 +18,3 @@ class MNG():
 
 	def save_image(self, img_name, img, dest_folder):
 		cv2.imwrite(dest.folder + img_name, img)
-
-
-
-

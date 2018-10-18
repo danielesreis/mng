@@ -4,7 +4,7 @@ import math
 class MNGFeaturesSize():
 
 	def estimated_area(self, gray_img):
-		return len(gray_img[gray_img == 255])
+		return len(gray_img[gray_img != 255])
 
 	def estimated_diameter(self, gray_img):
 		area 		= self.estimated_area(gray_img)
