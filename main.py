@@ -2,7 +2,7 @@ import os
 import cv2
 import MNG
 
-
+k 				= 7
 path 			= os.getcwd()
 folder 			= path + '\\images\\'
 img_names 		= os.listdir(folder)
@@ -24,18 +24,23 @@ for proc_folder in proc_folders:
 
 		seg_img 	= MNG.segmentation.otsu_thresholding(filt_img)
 		seg_img 	= MNG.preprocessing.remove_shadow(filt_img)
-		seg_img 	= MNG.contour.cut_image(ori_img)
+		seg_img 	= MNG.contour.cut_image(seg_img)
 
 		MNG.save_image(img_name, filt_img, path + '\\preprocessing\\' + proc_folder)
 		MNG.save_image(img_name, seg_img, path + '\\segmentation\\' + proc_folder)
 
 		MNG.features.extract_features(seg_img, img_name)
+		MNG.features.save_data(proc_folder)
 
 	file_path = MNG.features.save_data(proc_folder)
+	MNG.folds = MNGFolds(folder, file_path, k)
+	MNG.folds.separate_folds()
+
+	MNG.model = MNGModel(folder, MNG.folds)
 	# get sst values
-	MNG.model.build_rf_model(file_path, proc_folder)
+	MNG.model.build_rf_model(proc_folder)
 	# divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe
-	MNG.model.build_mlr_model(file_path, proc_folder)
+	MNG.model.build_mlr_model(proc_folder)
 
 def get_processing_func(preprocessing_name):
 	if preprocessing_name == 'original\\':
