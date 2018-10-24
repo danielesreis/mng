@@ -13,7 +13,7 @@ class MNGModel():
 		self.folds 			= folds
 		self.model_type		= model_type
 
-	# def save_results(self, file, r2, rmse, proc_folder):
+	# def save_results(self, file, r2, rmse):
 
 	def split_data(self, data):
 
@@ -22,7 +22,7 @@ class MNGModel():
 
 		# return X_train, Y_train
 
-	def build_rf_model(self, proc_folder, n_trees=100):
+	def build_rf_model(self, n_trees=100):
 
 		r2_values	= list()
 		rmse_values	= list()
@@ -45,9 +45,9 @@ class MNGModel():
 			r2_values.append(r2)
 			rmse_values.append(rmse)
 
-		save_results(file, r2_values, rmse_values, proc_folder)
+		save_results(file, r2_values, rmse_values)
 
-	def build_mlr_model(self, proc_folder):
+	def build_mlr_model(self):
 		
 		r2_values	= list()
 		rmse_values	= list()
@@ -67,4 +67,4 @@ class MNGModel():
 			r2_values.append(r2)
 			rmse_values.append(rmse)
 
-		save_results(file, r2_values, rmse_values, proc_folder)
+		save_results(file, r2_values, rmse_values)
