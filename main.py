@@ -3,6 +3,8 @@ import cv2
 import MNG
 
 k 				= 7
+model_type 		= 'all'
+
 path 			= os.getcwd()
 folder 			= path + '\\images\\'
 img_names 		= os.listdir(folder)
@@ -36,7 +38,7 @@ for proc_folder in proc_folders:
 	MNG.folds = MNGFolds(folder, file_path, k)
 	MNG.folds.separate_folds()
 
-	MNG.model = MNGModel(folder, MNG.folds)
+	MNG.model = MNGModel(folder, MNG.folds, model_type)
 	# get sst values
 	MNG.model.build_rf_model(proc_folder)
 	# divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe

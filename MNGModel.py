@@ -8,9 +8,10 @@ import os
 
 class MNGModel():
 
-	def __init__(self, folder, folds):
+	def __init__(self, folder, folds, model_type):
 		self.dest_folder 	= folder + '..results\\'
 		self.folds 			= folds
+		self.model_type		= model_type
 
 	# def save_results(self, file, r2, rmse, proc_folder):
 
@@ -27,7 +28,7 @@ class MNGModel():
 		rmse_values	= list()
 
 		for i in range(self.folds.k):
-			train, test = self.folds.get_fold_data(i+1)
+			train, test = self.folds.get_fold_data(i+1, self.model_type)
 
 			X_train, Y_train 	= self.split_data(train)
 			X_test, Y_test 		= self.split_data(test)
