@@ -2,13 +2,13 @@ import cv2
 import math
 import numpy as np
 import pandas as pd
-import MNGFeaturesSize
-import MNGFeaturesMean
-import MNGFeaturesDominantColor
-import MNGFeaturesRates
-import MNGFeaturesGradient
-import MNGFeaturesFractal
-import MNGFeaturesRegions
+from MNGFeaturesSize import MNGFeaturesSize
+from MNGFeaturesMeans import MNGFeaturesMeans
+from MNGFeaturesDominantColor import MNGFeaturesDominantColor
+from MNGFeaturesRates import MNGFeaturesRates
+from MNGFeaturesGradient import MNGFeaturesGradient
+from MNGFeaturesFractal import MNGFeaturesFractal
+from MNGFeaturesRegions import MNGFeaturesRegions
 
 class MNGFeatures():
 
@@ -26,22 +26,8 @@ class MNGFeatures():
 						'apex_equator_G_diff', 'equator_stalk_G_diff', 'apex_stalk_G_diff',										\
 						'apex_equator_B_diff', 'equator_stalk_B_diff', 'apex_stalk_B_diff']										\
 
-	def __init__(self, folder, image_names):
-		self.dest_folder 		= folder + '..\\features\\'
-		self.image_names		= [image_name.split('.')[0] for image_name in image_names]
-		self.data 				= new_df()
-
-		self.features_means		= MNGFeaturesMeans()
-		self.features_size 		= MNGFeaturesSize()
-		self.features_dominant	= MNGFeaturesDominantColor(self.features_means)
-		self.features_rates		= MNGFeaturesRates(self.features_means)
-		self.features_gradient	= MNGFeaturesGradient()
-		self.features_regions	= MNGFeaturesRegions(self.features_means, 5)
-		self.features_fractal	= MNGFeaturesFractal()
-		self.edit_feature_names()
-
 	def new_df(self):
-		self.data = pd.DataFrame(index=self.image_names, columns=self.feature_names)
+		return pd.DataFrame(index=self.image_names, columns=self.feature_names)
 
 	def insert_feature_row(self, img_name, feature_values):
 		feature_row = pd.Series(data=feature_values, index=self.feature_names, name=img_name)
@@ -51,6 +37,20 @@ class MNGFeatures():
 		file_path = self.dest_folder + 'features.csv'
 		data.to_csv(file_path, sep=';')
 		return file_path
+
+	def __init__(self, folder, image_names):
+		self.dest_folder 		= folder + '..\\features\\'
+		self.image_names		= [image_name.split('.')[0] for image_name in image_names]
+		self.data 				= self.new_df()
+
+		self.features_means		= MNGFeaturesMeans()
+		self.features_size 		= MNGFeaturesSize()
+		self.features_dominant	= MNGFeaturesDominantColor(self.features_means)
+		self.features_rates		= MNGFeaturesRates(self.features_means)
+		self.features_gradient	= MNGFeaturesGradient()
+		self.features_regions	= MNGFeaturesRegions(self.features_means)
+		self.features_fractal	= MNGFeaturesFractal()
+		self.edit_feature_names()
 
 	def extract_features(self, BGR_img, img_name):
 		gray_img= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)

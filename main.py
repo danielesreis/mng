@@ -1,9 +1,14 @@
 import os
 import cv2
-import MNG
+from MNG import MNG
 
 k 				= 7
 model_type 		= 'all'
+att 			= 'sst'
+
+path 			= os.getcwd()
+folder 			= path + '\\images\\'
+img_names 		= os.listdir(folder)
 
 MNG 			= MNG(path, img_names)
 MNG.features.new_df()
@@ -11,14 +16,9 @@ feature_names 	= MNG.features.feature_names
 # means
 features_mlr 	= feature_names[:8]
 
-path 			= os.getcwd()
-folder 			= path + '\\images\\'
-img_names 		= os.listdir(folder)
-
-
 func = get_processing_func(proc_folder)
 for img_name in img_names:
-	BGR_img = cv2.imread(img_name)
+	BGR_img = cv2.imread(folder+img_name)
 
 	# build model for original images too
 	filt_img = func(BGR_img)
@@ -36,7 +36,7 @@ file_path = MNG.features.save_data()
 MNG.folds = MNGFolds(folder, file_path, k)
 MNG.folds.separate_folds()
 
-MNG.model = MNGModel(folder, MNG.folds, model_type)
+MNG.model = MNGModel(folder, MNG.folds, model_type, att)
 # get sst values
 MNG.model.build_rf_model(model_type)
 # divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe

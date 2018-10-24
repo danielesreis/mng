@@ -8,10 +8,11 @@ import os
 
 class MNGModel():
 
-	def __init__(self, folder, folds, model_type):
+	def __init__(self, folder, folds, model_type, att):
 		self.dest_folder 	= folder + '..results\\'
 		self.folds 			= folds
 		self.model_type		= model_type
+		self.att 			= att
 
 	def save_results(self, algorithm, model_type, r2, rmse):
 
@@ -22,11 +23,11 @@ class MNGModel():
 	def split_data(self, data, features=['all']):
 
 		if 'all' in features:
-			X = data.drop('sst', axis=1)
-		else
+			X = data.drop(self.att, axis=1)
+		else:
 			X = data[features]
 
-		Y 	= data['sst']
+		Y 	= data[self.att]
 
 		return X, Y
 

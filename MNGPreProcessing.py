@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 from _unsharp_mask import unsharp_mask
-from skimage import restoration
 
 class MNGPreProcessing():
 
@@ -16,10 +15,6 @@ class MNGPreProcessing():
 	def median_filter(self, img, MF_WINDOW=15):
 		filt_img = cv2.medianBlur(img, MF_WINDOW)
 		return filt_img
-
-	def deblurring_filter(self, img, psf=np.ones((5, 5))/25):
-		deconvolved_img = restoration.wiener(img, psf, 1100)
-		return deconvolved_img
 
 	def opening_operation(self, img, KERNEL=np.ones((5,5), np.uint8)):
 		filt_img = cv2.morphologyEx(img, cv2.MORPH_OPEN, KERNEL)
