@@ -18,8 +18,8 @@ class MNG():
 		self.folds 				= folds
 		self.model 				= model
 
-	def save_image(self, img_name, img, dest_folder):
-		cv2.imwrite(dest.folder + img_name, img)
+	def save_image(self, img_name, img, path):
+		cv2.imwrite(path + img_name, img)
 
 	@set_folds.setter
 	def set_folds(self, folds):

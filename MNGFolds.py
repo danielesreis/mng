@@ -43,7 +43,7 @@ class MNGFolds():
 				
 		return train, test
 
-	def organize_folds():
+	def organize_folds(self):
 		nums = np.arange(1, self.k+1)
 
 		for fold in range(self.k):
@@ -92,6 +92,3 @@ class MNGFolds():
 			cond 		= self.data.index.str.contains(tommy_folders[fold])
 			tommy_fold = tommy_data.loc[cond]
 			tommy_fold.to_csv(self.dest_folder + 'tommy\\' + self.tommy_folders[fold] + '.csv', sep=';')
-
-		# organize_folds()
-

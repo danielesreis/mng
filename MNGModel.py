@@ -13,22 +13,30 @@ class MNGModel():
 		self.folds 			= folds
 		self.model_type		= model_type
 
-	# def save_results(self, file, r2, rmse, proc_folder):
+	def save_results(self, algorithm, model_type, r2, rmse):
 
-	def split_data(self, data):
+		results = pd.DataFrame({'r2': rmse, 'rmse': rmse}, index=np.arange(1,self.k+1))
+		results.to_csv(self.dest_folder + algorithm + '_' + model_type + '.csv', sep=';')
 
-		# X_train 	= data[1:n_cols - 1]
-		# Y_train 	= data['target']
 
-		# return X_train, Y_train
+	def split_data(self, data, features=['all']):
 
-	def build_rf_model(self, proc_folder, n_trees=100):
+		if 'all' in features:
+			X = data.drop('sst', axis=1)
+		else
+			X = data[features]
+
+		Y 	= data['sst']
+
+		return X, Y
+
+	def build_rf_model(self, model_type, n_trees=100):
 
 		r2_values	= list()
 		rmse_values	= list()
 
-		for i in range(self.folds.k):
-			train, test = self.folds.get_fold_data(i+1, self.model_type)
+		for fold in range(self.folds.k):
+			train, test = self.folds.get_fold_data(fold+1, self.model_type)
 
 			X_train, Y_train 	= self.split_data(train)
 			X_test, Y_test 		= self.split_data(test)
@@ -36,8 +44,8 @@ class MNGModel():
 			rf_model 		= RandomForestClassifier(n_estimators=n_trees).fit(X_train, Y_train)
 			Y_predicted 	= rf_model.predict(X_test)
 			
-			# rf_model.estimators_
-			# rf_model.feature_importances_
+			print(rf_model.estimators_)
+			print(rf_model.feature_importances_)
 
 			r2 		= r2_score(Y_test, Y_predicted)
 			rmse 	= math.sqrt(mean_squared_error(Y_test, Y_predicted))
@@ -45,17 +53,17 @@ class MNGModel():
 			r2_values.append(r2)
 			rmse_values.append(rmse)
 
-		save_results(file, r2_values, rmse_values, proc_folder)
+		save_results('rf', model_type, r2_values, rmse_values)
 
-	def build_mlr_model(self, proc_folder):
+	def build_mlr_model(self, model_type, features):
 		
 		r2_values	= list()
 		rmse_values	= list()
 
-		for i in range(self.folds.k):
-			train, test = self.folds.get_fold_data(i+1)
+		for fold in range(self.folds.k):
+			train, test = self.folds.get_fold_data(fold+1)
 
-			X_train, Y_train 	= self.split_data(train)
+			X_train, Y_train 	= self.split_data(train, features)
 			X_test, Y_test 		= self.split_data(test)
 
 			rf_model 		= LinearRegression().fit(X_train, Y_train)
@@ -67,4 +75,4 @@ class MNGModel():
 			r2_values.append(r2)
 			rmse_values.append(rmse)
 
-		save_results(file, r2_values, rmse_values, proc_folder)
+		save_results('mlr', model_type, r2_values, rmse_values)

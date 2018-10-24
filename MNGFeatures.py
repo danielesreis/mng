@@ -28,7 +28,7 @@ class MNGFeatures():
 
 	def __init__(self, folder, image_names):
 		self.dest_folder 		= folder + '..\\features\\'
-		self.image_names		= image_names
+		self.image_names		= [image_name.split('.')[0] for image_name in image_names]
 		self.data 				= new_df()
 
 		self.features_means		= MNGFeaturesMeans()
@@ -47,8 +47,8 @@ class MNGFeatures():
 		feature_row = pd.Series(data=feature_values, index=self.feature_names, name=img_name)
 		self.data 	= self.data.append(feature_row)
 
-	def save_data(self, subfolder):
-		file_path = self.dest_folder + subfolder + '.csv'
+	def save_data(self):
+		file_path = self.dest_folder + 'features.csv'
 		data.to_csv(file_path, sep=';')
 		return file_path
 
