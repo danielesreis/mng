@@ -3,7 +3,7 @@ import numpy as np
 
 class MNGFeaturesRegions():
 
-	def __init__(self, feature_means, n):
+	def __init__(self, feature_means, n=5):
 		self.feature_means 	= feature_means
 		self.n 				= n
 
@@ -173,10 +173,10 @@ class MNGFeaturesRegions():
 		return means
 
 	def regions_means_diffs(self, img):	
-		means = apex_equator_stalk_means(img)
+		means = apex_equator_stalk_means(img)		
 
-		region_diffs = np.array([	means[0][0] - means[1][0], means[1][0] - means[2][0], means[0][0] - means[2][0] \
-									means[0][1] - means[1][1], means[1][1] - means[2][1], means[0][1] - means[2][1]\
+		region_diffs = np.array([	means[0][0] - means[1][0], means[1][0] - means[2][0], means[0][0] - means[2][0],\
+									means[0][1] - means[1][1], means[1][1] - means[2][1], means[0][1] - means[2][1],\
 									means[0][2] - means[1][2], means[1][2] - means[2][2], means[0][2] - means[2][2]])
 
 		return region_diffs
