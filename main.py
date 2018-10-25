@@ -13,17 +13,16 @@ folder 			= path + '\\images\\'
 img_names 		= os.listdir(folder)
 
 MNG 			= MNG(path, img_names)
-MNG.features.new_df()
-feature_names 	= MNG.features.feature_names
-# means
-features_mlr 	= feature_names[:8]
 
-func = get_processing_func(proc_folder)
+feature_names 	= MNG.features.feature_names
+features_mlr 	= feature_names[:9]
+MNG.features.current_features = features_mlr
+MNG.features.new_df()
+
 for img_name in img_names:
 	BGR_img = cv2.imread(folder+img_name)
 
-	# build model for original images too
-	filt_img = func(BGR_img)
+	# preprocess img
 
 	seg_img = MNG.segmentation.otsu_thresholding(filt_img)
 	seg_img = MNG.preprocessing.remove_shadow(filt_img)
@@ -44,17 +43,3 @@ MNG.model.build_rf_model(model_type)
 # divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe
 
 MNG.model.build_mlr_model(model_type, features_mlr)
-
-def get_processing_func(preprocessing_name):
-	if preprocessing_name == 'original\\':
-		return -1
-	elif preprocessing_name == 'median\\':
-		return MNG.preprocessing.median_filter
-	elif preprocessing_name == 'deblurring\\':
-		return MNG.preprocessing.deblurring_filter
-	elif preprocessing_name == 'opening\\':
-		return MNG.preprocessing.opening_operation
-	elif preprocessing_name == 'closing\\':
-		return MNG.preprocessing.closing_operation
-	elif preprocessing_name == 'sharpening\\':
-		return MNG.preprocessing.unsharp_masking

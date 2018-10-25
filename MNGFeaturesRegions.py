@@ -181,7 +181,7 @@ class MNGFeaturesRegions():
 
 		return region_diffs
 
-	def get_var_mean_names():
+	def get_var_mean_names(self):
 		channels_RGB = ['R', 'G', 'B']
 		channels_HSV = ['H', 'S', 'V']
 		channels_Lab = ['L', 'a', 'b']
@@ -206,7 +206,7 @@ class MNGFeaturesRegions():
 
 		return names
 
-	def get_var_mean_diffs_names():
+	def get_var_mean_diffs_names(self):
 		channels_RGB = ['R', 'G', 'B']
 		channels_HSV = ['H', 'S', 'V']
 		channels_Lab = ['L', 'a', 'b']
@@ -214,8 +214,8 @@ class MNGFeaturesRegions():
 		names_HSV = []
 		names_Lab = []
 
-		for i in range(n-1):
-			for j in range(i, n-1):
+		for i in range(self.n-1):
+			for j in range(i, self.n-1):
 				for channel in channels_RGB:
 					names_RGB.append(str(i) + '_' + str(j+1) + '_' + channel + '_diff')
 

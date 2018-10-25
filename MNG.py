@@ -3,29 +3,34 @@ from MNGSegmentation import MNGSegmentation
 from MNGContour import MNGContour
 from MNGFeatures import MNGFeatures
 
-class Mng(): 
+class MNG(): 
 
-	def __init__(self, folder, n_images):
+	def __init__(self, folder, image_names):
 		self.folder				= folder
 		self.segmentation 		= MNGSegmentation()
 		self.preprocessing 		= MNGPreProcessing(self.segmentation)
 		self.contour 			= MNGContour()
 		self.features 			= MNGFeatures(folder, image_names)
-		self.folds 				= folds
-		self.model 				= model
+		self._folds 			= None
+		self._model 			= None
 
 	def save_image(self, img_name, img, path):
 		cv2.imwrite(path + img_name, img)
 
-	def set_folds(self, folds):
-		self.folds = folds
+	@property
+	def folds(self):
+		return self._folds 
 
-	def get_folds(self):
-		return self.folds 
+	@folds.setter
+	def folds(self, folds):
+		self._folds = folds
 
-	def set_model(self, model):
-		self.model = model
+	@property
+	def model(self):
+		return self._model
 
-	def get_model(self):
-		return self.model
+	@model.setter
+	def model(self, model):
+		self._model = model
+
 	
