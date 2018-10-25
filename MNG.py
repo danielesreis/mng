@@ -1,4 +1,3 @@
-import cv2
 from MNGPreProcessing import MNGPreProcessing
 from MNGSegmentation import MNGSegmentation
 from MNGContour import MNGContour

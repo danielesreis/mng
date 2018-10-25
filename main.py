@@ -1,6 +1,8 @@
 import os
 import cv2
 from MNG import MNG
+from MNGFolds import MNGFolds
+from MNGModel import MNGModel
 
 k 				= 7
 model_type 		= 'all'
@@ -41,7 +43,7 @@ MNG.model = MNGModel(folder, MNG.folds, model_type, att)
 MNG.model.build_rf_model(model_type)
 # divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe
 
-MNG.model.build_mlr_model(model_type, features, mlr)
+MNG.model.build_mlr_model(model_type, features_mlr)
 
 def get_processing_func(preprocessing_name):
 	if preprocessing_name == 'original\\':

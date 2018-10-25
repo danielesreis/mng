@@ -53,7 +53,7 @@ class MNGFeatures():
 		self.edit_feature_names()
 
 	def extract_features(self, BGR_img, img_name):
-		gray_img= cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
+		gray_img = cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
 		
 		RGB_img = BGR_img[:,:,::-1]
 		HSV_img = cv2.cvtColor(RGB_img, cv2.COLOR_RGB2HSV)

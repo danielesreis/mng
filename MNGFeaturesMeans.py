@@ -7,5 +7,5 @@ class MNGFeaturesMeans():
 		mean_1 	= img[:,:,1].mean()
 		mean_2 	= img[:,:,2].mean()
 
-		means 	= np.array(mean_0, mean_1, mean_2)
+		means 	= np.array([mean_0, mean_1, mean_2])
 		return means
