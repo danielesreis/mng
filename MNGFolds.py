@@ -5,7 +5,6 @@ import os
 class MNGFolds():
 
 	def __init__(self, folder, features_path, k):
-		self.origin_folder	 	= folder
 		self.dest_folder	 	= folder + '..\\features\\'
 		self.features_path		= features_path
 		self.k	 				= k
