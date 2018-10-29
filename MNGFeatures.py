@@ -34,7 +34,7 @@ class MNGFeatures():
 		self.data.loc[img_name.split('.')[0]] = feature_row
 
 	def save_data(self):
-		file_path = self.dest_folder + 'features.csv'
+		file_path = self.dest_folder + self.current_features_name + '_all.csv'
 		self.data.to_csv(file_path, sep=';')
 		return file_path
 
@@ -55,6 +55,15 @@ class MNGFeatures():
 	@current_features.setter
 	def current_features(self, current_features):
 		self._current_features = current_features
+
+	@property
+	def current_features_name(self):
+		return self._current_features_name
+
+	@current_features_name.setter
+	def current_features_name(self, current_features_name):
+		self._current_features_name = current_features_name
+	
 
 	# def get_feature_method(features):
 	# 	indexes = list()
@@ -78,8 +87,9 @@ class MNGFeatures():
 		self.features_regions	= MNGFeaturesRegions(self.features_means)
 		self.features_fractal	= MNGFeaturesFractal()
 
-		self._current_features  = None
-		self.data 				= None
+		self._current_features  	= None
+		self._current_features_name = None
+		self.data 					= None
 		self.edit_feature_names()
 
 	def extract_features(self, BGR_img, img_name):

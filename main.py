@@ -17,6 +17,7 @@ MNG 			= MNG(path, img_names)
 feature_names 	= MNG.features.feature_names
 features_mlr 	= feature_names[:9]
 MNG.features.current_features = features_mlr
+MNG.features.current_features_name = 'means'
 MNG.features.new_df()
 
 for img_name in img_names:
@@ -40,6 +41,5 @@ MNG.folds.separate_folds()
 MNG.model = MNGModel(folder, MNG.folds, model_type, att)
 # get sst values
 MNG.model.build_rf_model(model_type)
-# divide features data frame into smaller dataframes and call build_mlr_model for each smaller dataframe
 
 MNG.model.build_mlr_model(model_type, features_mlr)
