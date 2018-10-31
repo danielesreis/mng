@@ -25,5 +25,5 @@ class MNGPreProcessing():
 		return filt_img
 
 	def unsharp_masking(self, color_img, RADIUS=1, AMOUNT=1):
-		filt_img = unsharp_mask(color_img, radius=RADIUS, amount=AMOUNT, multichannel=True)
+		filt_img = unsharp_mask(color_img, radius=RADIUS, amount=AMOUNT, multichannel=True, preserve_range=True)
 		return filt_img

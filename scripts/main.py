@@ -9,7 +9,7 @@ model_type 		= 'all'
 att 			= 'sst'
 
 path 			= os.getcwd()
-folder 			= path + '\\images\\'
+folder 			= path + '\\..\\images\\'
 img_names 		= os.listdir(folder)
 
 MNG 			= MNG(path, img_names)

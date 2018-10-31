@@ -31,14 +31,14 @@ class MNGFolds():
 	def get_fold_data(self, fold, model_type):
 
 		if model_type is 'all':
-			train 	= pd.read_csv(self.dest_folder + 'folds\\train_sem_' + str(fold))
-			test 	= pd.read_csv(self.dest_folder + 'folds\\teste_' + str(fold))
+			train 	= pd.read_csv(self.dest_folder + 'folds\\all\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
+			test 	= pd.read_csv(self.dest_folder + 'folds\\all\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
 		elif model_type is 'palmer':
-			train 	= pd.read_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold))
-			test 	= pd.read_csv(self.dest_folder + 'folds\\palmer\\teste_' + str(fold))
+			train 	= pd.read_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
+			test 	= pd.read_csv(self.dest_folder + 'folds\\palmer\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
 		else:
-			train 	= pd.read_csv(self.dest_folder + 'folds\\tommy\\train_sem_' + str(fold))
-			test 	= pd.read_csv(self.dest_folder + 'folds\\tommy\\teste_' + str(fold))
+			train 	= pd.read_csv(self.dest_folder + 'folds\\tommy\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
+			test 	= pd.read_csv(self.dest_folder + 'folds\\tommy\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
 				
 		return train, test
 
@@ -47,27 +47,30 @@ class MNGFolds():
 		nums = np.arange(1, self.k+1)
 
 		for fold in range(self.k):
-			palmer_test 	= pd.read_csv(self.dest_folder + 'palmer\\fold' + str(fold+1))
-			tommy_test 		= pd.read_csv(self.dest_folder + 'tommy\\fold' + str(fold+1))
+			palmer_test 	= pd.read_csv(self.dest_folder + 'palmer\\fold' + str(fold+1) + '.csv', sep=';', index_col=0)
+			tommy_test 		= pd.read_csv(self.dest_folder + 'tommy\\fold' + str(fold+1) + '.csv', sep=';', index_col=0)
 			all_test		= pd.concat([palmer_test, tommy_test])
-			all_test.to_csv(self.dest_folder + 'folds\\teste_' + str(fold))
+
+			palmer_test.to_csv(self.dest_folder + 'folds\\palmer\\teste_' + str(fold+1) + '.csv', sep=';')
+			tommy_test.to_csv(self.dest_folder + 'folds\\tommy\\teste_' + str(fold+1) + '.csv', sep=';')
+			all_test.to_csv(self.dest_folder + 'folds\\all\\teste_' + str(fold+1) + '.csv', sep=';')
 
 			train_folds 	= np.setdiff1d(nums, fold+1)
 			palmer_train 	= pd.DataFrame([])
 			tommy_train 	= pd.DataFrame([])
-			all_data_train 	= pd.DataFrame([])
+			all_train	 	= pd.DataFrame([])
 
 			for train_fold in train_folds:
-				palmer 	= pd.read_csv(self.dest_folder + 'palmer\\fold' + str(train_fold))
-				tommy 	= pd.read_csv(self.dest_folder + 'tommy\\fold' + str(train_fold))
+				palmer 	= pd.read_csv(self.dest_folder + 'palmer\\fold' + str(train_fold) + '.csv', sep=';', index_col=0)
+				tommy 	= pd.read_csv(self.dest_folder + 'tommy\\fold' + str(train_fold) + '.csv', sep=';', index_col=0)
 
 				palmer_train 	= pd.concat([palmer_train, palmer])
 				tommy_train 	= pd.concat([tommy_train, tommy])
 				all_train 		= pd.concat([all_train, palmer, tommy])
 
-			# palmer_train.to_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold+1))
-			# palmer_train.to_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold+1))
-			all_train.to_csv(self.dest_folder + 'folds\\train_sem_' + str(fold+1))
+			palmer_train.to_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold+1) + '.csv', sep=';')
+			tommy_train.to_csv(self.dest_folder + 'folds\\tommy\\train_sem_' + str(fold+1) + '.csv', sep=';')
+			all_train.to_csv(self.dest_folder + 'folds\\all\\train_sem_' + str(fold+1) + '.csv', sep=';')
 
 	def organize_folds(self):
 		# must be an even number	
@@ -84,12 +87,12 @@ class MNGFolds():
 
 			for i in range(self.k):
 
-				palmer_i_fold 	= pd.read_csv(self.dest_folder + 'palmer\\' + self.palmer_folders[i])
-				tommy_i_fold 	= pd.read_csv(self.dest_folder + 'tommy\\' + self.tommy_folders[i])
+				palmer_i_fold 	= pd.read_csv(self.dest_folder + 'palmer\\' + self.palmer_folders[i] + '.csv', sep=';', index_col=0)
+				tommy_i_fold 	= pd.read_csv(self.dest_folder + 'tommy\\' + self.tommy_folders[i] + '.csv', sep=';', index_col=0)
 
 				if fold == self.k-1:
-					palmer_slice 	= palmer_last_fold.iloc[ind2:]
-					tommy_slice		= tommy_last_fold.iloc[ind2:]
+					palmer_slice 	= palmer_i_fold.iloc[ind1:]
+					tommy_slice		= tommy_i_fold.iloc[ind1:]
 					
 				else:
 					palmer_slice 	= palmer_i_fold.iloc[ind1:ind2]
@@ -97,11 +100,11 @@ class MNGFolds():
 
 				palmer 		= pd.concat([palmer, palmer_slice])
 				tommy 		= pd.concat([tommy, tommy_slice])
-				all_data	= pd.concat([all_data, palmer, tommy])
+				all_data	= pd.concat([all_data, palmer_slice, tommy_slice])
 
-			palmer.to_csv(self.dest_folder + 'palmer\\fold' + str(fold+1))
-			tommy.to_csv(self.dest_folder + 'tommy\\fold' + str(fold+1))
-			all_data.to_csv(self.dest_folder + 'all_fold' + str(fold+1))
+			palmer.to_csv(self.dest_folder + 'palmer\\fold' + str(fold+1) + '.csv', sep=';')
+			tommy.to_csv(self.dest_folder + 'tommy\\fold' + str(fold+1) + '.csv', sep=';')
+			all_data.to_csv(self.dest_folder + 'all\\all_fold' + str(fold+1) + '.csv', sep=';')
 
 		self.concat_folds()
 
@@ -124,3 +127,5 @@ class MNGFolds():
 			cond = tommy_data.index.str.contains(self.tommy_folders[fold])
 			tommy_fold = tommy_data.loc[cond]
 			tommy_fold.to_csv(self.dest_folder + 'tommy\\' + self.tommy_folders[fold] + '.csv', sep=';')
+
+		self.organize_folds()
