@@ -27,7 +27,7 @@ class MNGFeatures():
 						'apex_equator_B_diff', 'equator_stalk_B_diff', 'apex_stalk_B_diff']										\
 
 	def new_df(self):
-		self.data = pd.DataFrame(index=self.image_names, columns=self.current_features)
+		self.data = pd.DataFrame(index=self.image_names, columns=self.current_features, dtype=np.float64)
 
 	def insert_feature_row(self, img_name, feature_values):
 		feature_row = pd.Series(data=feature_values, index=self.current_features, name=img_name.split('.')[0])
@@ -36,6 +36,7 @@ class MNGFeatures():
 	def save_data(self):
 		file_path = self.dest_folder + self.current_features_name + '_all.csv'
 		self.data.to_csv(file_path, sep=';')
+		file_path = self.edit_data_frame()
 		return file_path
 
 	def edit_feature_names(self):
@@ -47,6 +48,37 @@ class MNGFeatures():
 
 		self.feature_names = [self.feature_names, names]
 		self.feature_names = [item for sublist in self.feature_names for item in sublist]
+
+	def edit_data_frame(self):
+		new_data = self.data
+		index = self.data.index.values
+
+		info = list()
+		info = [ind.split('_') for ind in index]
+
+		var = [inf[0] for inf in info]
+		sem = [int(inf[1][-1]) for inf in info]
+		num = [int(inf[2][3:]) for inf in info]
+		lado = [int(inf[3][-1]) for inf in info]
+
+		var = pd.Series(var, index)
+		sem = pd.Series(sem, index)
+		num = pd.Series(num, index)
+		lado = pd.Series(lado, index)
+
+		new_data['sem'] = sem
+		new_data['num'] = num
+		new_data['lado'] = lado
+		new_data['var'] = var
+
+		means = new_data.groupby(['var', 'sem', 'num'])[data.columns].mean()
+		new_index = index = [ind[:-6] for ind in index]
+		new_index = list(sorted(set(index)))
+
+		new_data = means.drop(columns=['sem', 'num', 'lado']).reset_index()
+		new_data.set_index(new_index)
+
+		return self.dest_folder + self.current_features_name + '_all_half.csv'
 
 	@property
 	def current_features(self):

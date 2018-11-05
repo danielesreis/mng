@@ -4,7 +4,7 @@ import os
 
 class MNGFolds():
 
-	def __init__(self, folder, features_path, k, n=120):
+	def __init__(self, folder, features_path, k, n=60):
 		self.dest_folder	 	= folder + '..\\features\\'
 		self.features_path		= features_path
 		self.k	 				= k
@@ -18,8 +18,8 @@ class MNGFolds():
 
 	def set_folders_names(self, k):
 
-		palmer_names 	= ['palmer']*self.k
-		tommy_names 	= ['tommy']*self.k
+		palmer_names 	= ['palmer_sem']*self.k
+		tommy_names 	= ['tommy_sem']*self.k
 
 		nums = list(np.arange(1, self.k+1))
 
@@ -74,7 +74,7 @@ class MNGFolds():
 
 	def organize_folds(self):
 		# must be an even number	
-		n_fold = int(self.n/self.k)-1
+		n_fold = int(self.n/self.k)
 
 		for fold in range(self.k):
 
