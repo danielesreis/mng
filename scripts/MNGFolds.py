@@ -31,14 +31,14 @@ class MNGFolds():
 	def get_fold_data(self, fold, model_type):
 
 		if model_type is 'all':
-			train 	= pd.read_csv(self.dest_folder + 'folds\\all\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
-			test 	= pd.read_csv(self.dest_folder + 'folds\\all\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
+			train 	= pd.read_csv(self.dest_folder + 'datasets\\all\\' + str(fold) + '\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
+			test 	= pd.read_csv(self.dest_folder + 'datasets\\all\\' + str(fold) + '\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
 		elif model_type is 'palmer':
-			train 	= pd.read_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
-			test 	= pd.read_csv(self.dest_folder + 'folds\\palmer\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
+			train 	= pd.read_csv(self.dest_folder + 'datasets\\palmer\\' + str(fold) + '\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
+			test 	= pd.read_csv(self.dest_folder + 'datasets\\palmer\\' + str(fold) + '\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
 		else:
-			train 	= pd.read_csv(self.dest_folder + 'folds\\tommy\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
-			test 	= pd.read_csv(self.dest_folder + 'folds\\tommy\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
+			train 	= pd.read_csv(self.dest_folder + 'datasets\\tommy\\' + str(fold) + '\\train_sem_' + str(fold) + '.csv', sep=';', index_col=0)
+			test 	= pd.read_csv(self.dest_folder + 'datasets\\tommy\\' + str(fold) + '\\teste_' + str(fold) + '.csv', sep=';', index_col=0)
 				
 		return train, test
 
@@ -68,9 +68,9 @@ class MNGFolds():
 				tommy_train 	= pd.concat([tommy_train, tommy])
 				all_train 		= pd.concat([all_train, palmer, tommy])
 
-			palmer_train.to_csv(self.dest_folder + 'folds\\palmer\\train_sem_' + str(fold+1) + '.csv', sep=';')
-			tommy_train.to_csv(self.dest_folder + 'folds\\tommy\\train_sem_' + str(fold+1) + '.csv', sep=';')
-			all_train.to_csv(self.dest_folder + 'folds\\all\\train_sem_' + str(fold+1) + '.csv', sep=';')
+			palmer_train.to_csv(self.dest_folder + 'datasets\\palmer\\' + str(fold+1) + '\\train_sem_' + str(fold+1) + '.csv', sep=';')
+			tommy_train.to_csv(self.dest_folder + 'datasets\\tommy\\' + str(fold+1) + '\\train_sem_' + str(fold+1) + '.csv', sep=';')
+			all_train.to_csv(self.dest_folder + 'datasets\\all\\' + str(fold+1) + '\\train_sem_' + str(fold+1) + '.csv', sep=';')
 
 	def organize_folds(self):
 		# must be an even number	
