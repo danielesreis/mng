@@ -80,6 +80,9 @@ class MNGFeatures():
 
 		return self.dest_folder + self.current_features_name + '_all_half.csv'
 
+	def add_target(target1, target2):
+		
+
 	@property
 	def current_features(self):
 		return self._current_features
