@@ -51,6 +51,7 @@ class MNGFeatures():
 
 	def edit_data_frame(self):
 		new_data = self.data
+		columns = self.data.columns
 		index = self.data.index.values
 
 		info = list()
@@ -59,24 +60,23 @@ class MNGFeatures():
 		var = [inf[0] for inf in info]
 		sem = [int(inf[1][-1]) for inf in info]
 		num = [int(inf[2][3:]) for inf in info]
-		lado = [int(inf[3][-1]) for inf in info]
 
 		var = pd.Series(var, index)
 		sem = pd.Series(sem, index)
 		num = pd.Series(num, index)
-		lado = pd.Series(lado, index)
 
+		new_data['var'] = var
 		new_data['sem'] = sem
 		new_data['num'] = num
-		new_data['lado'] = lado
-		new_data['var'] = var
 
-		means = new_data.groupby(['var', 'sem', 'num'])[data.columns].mean()
-		new_index = index = [ind[:-6] for ind in index]
+		means = new_data.groupby(['var', 'sem', 'num'])[columns].mean()
+		new_data = means.reset_index().drop(columns=['var', 'sem', 'num'])
+
+		new_index = [ind.split('lado')[0] for ind in index]
 		new_index = list(sorted(set(index)))
 
-		new_data = means.drop(columns=['sem', 'num', 'lado']).reset_index()
-		new_data.set_index(new_index)
+		new_data['ind'] = new_index
+		new_data.set_index(new_index, inplace=True)
 
 		return self.dest_folder + self.current_features_name + '_all_half.csv'
 
