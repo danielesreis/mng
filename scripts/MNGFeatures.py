@@ -50,7 +50,7 @@ class MNGFeatures():
 		self.feature_names = [item for sublist in self.feature_names for item in sublist]
 
 	def edit_data_frame(self):
-		new_data = self.data
+		new_data = self.data.copy()
 		columns = self.data.columns
 		index = self.data.index.values
 
@@ -59,7 +59,8 @@ class MNGFeatures():
 
 		var = [inf[0] for inf in info]
 		sem = [int(inf[1][-1]) for inf in info]
-		num = [int(inf[2][3:]) for inf in info]
+
+		num = [int(inf[2].split('lado')[0][3:]) for inf in info]
 
 		var = pd.Series(var, index)
 		sem = pd.Series(sem, index)
@@ -76,12 +77,22 @@ class MNGFeatures():
 		new_index = list(sorted(set(index)))
 
 		new_data['ind'] = new_index
-		new_data.set_index(new_index, inplace=True)
+		new_data.set_index('ind', inplace=True)
 
-		return self.dest_folder + self.current_features_name + '_all_half.csv'
+		file_path = self.dest_folder + self.current_features_name + '_all_half.csv'
+		new_data.to_csv(file_path, sep=';')
 
-	def add_target(target1, target2):
-		
+		return file_path
+
+	def add_target(self, file_path, target1, target2):
+		att1 = pd.read_csv(target1, sep=';')[self.att].values
+		att2 = pd.read_csv(target2, sep=';')[self.att].values
+
+		att = np.concatenate((att1,att2))
+		data = pd.read_csv(file_path, sep=';', index_col=0)
+
+		data.insert(loc=1, column=self.att, value=att)
+		data.to_csv(file_path, sep=';')
 
 	@property
 	def current_features(self):
@@ -110,9 +121,10 @@ class MNGFeatures():
 	# 	methods = [self.feature_methods[index] for index in indexes]
 	# 	return methods
 
-	def __init__(self, folder, image_names):
+	def __init__(self, folder, image_names, att):
 		self.dest_folder 		= folder + '..\\features\\'
 		self.image_names		= [image_name.split('.')[0] for image_name in image_names]
+		self.att 				= att
 
 		self.features_means		= MNGFeaturesMeans()
 		self.features_size 		= MNGFeaturesSize()

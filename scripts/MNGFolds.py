@@ -51,9 +51,9 @@ class MNGFolds():
 			tommy_test 		= pd.read_csv(self.dest_folder + 'tommy\\fold' + str(fold+1) + '.csv', sep=';', index_col=0)
 			all_test		= pd.concat([palmer_test, tommy_test])
 
-			palmer_test.to_csv(self.dest_folder + 'folds\\palmer\\teste_' + str(fold+1) + '.csv', sep=';')
-			tommy_test.to_csv(self.dest_folder + 'folds\\tommy\\teste_' + str(fold+1) + '.csv', sep=';')
-			all_test.to_csv(self.dest_folder + 'folds\\all\\teste_' + str(fold+1) + '.csv', sep=';')
+			palmer_test.to_csv(self.dest_folder + 'datasets\\palmer\\' + str(fold+1) + '\\teste_' + str(fold+1) + '.csv', sep=';')
+			tommy_test.to_csv(self.dest_folder + 'datasets\\tommy\\' + str(fold+1) + '\\teste_' + str(fold+1) + '.csv', sep=';')
+			all_test.to_csv(self.dest_folder + 'datasets\\all\\' + str(fold+1) + '\\teste_' + str(fold+1) + '.csv', sep=';')
 
 			train_folds 	= np.setdiff1d(nums, fold+1)
 			palmer_train 	= pd.DataFrame([])
@@ -109,7 +109,6 @@ class MNGFolds():
 		self.concat_folds()
 
 	def separate_folds(self):
-
 		palmer_cond = self.data.index.str.contains('palmer')
 		tommy_cond 	= self.data.index.str.contains('tommy')
 

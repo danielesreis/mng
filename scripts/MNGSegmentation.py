@@ -18,4 +18,4 @@ class MNGSegmentation():
 		thr_img 				= cv2.bitwise_and(color_img, color_img, mask = inv_mask)
 		thr_img[thr_img == 0] 	= 255
 	
-		return thr_img
+		return thr_img, inv_mask

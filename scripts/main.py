@@ -15,7 +15,7 @@ path 			= os.getcwd()
 folder 			= path + '\\..\\images\\'
 img_names 		= os.listdir(folder)
 
-MNG 			= MNG(path, img_names)
+MNG 			= MNG(path, img_names, att)
 
 feature_names 	= MNG.features.feature_names
 features_mlr 	= feature_names[:9]
@@ -23,22 +23,27 @@ MNG.features.current_features = features_mlr
 MNG.features.current_features_name = 'means'
 MNG.features.new_df()
 
-for img_name in img_names:
+def pre_process(img_name):
 	BGR_img = cv2.imread(folder+img_name)
 
-	# preprocess img
+	med 	= MNG.preprocessing.median_filter(BGR_img, 11)
+	seg, __ = MNG.segmentation.otsu_thresholding(med)
+	ope 	= MNG.preprocessing.opening_operation(seg, np.ones((15,15), np.uint8))
+	shd 	= MNG.preprocessing.remove_shadow(ope)
+	filt 	= MNG.preprocessing.closing_operation(shd, med, np.ones((13,13), np.uint8))
 
-	seg_img = MNG.segmentation.otsu_thresholding(filt_img)
-	seg_img = MNG.preprocessing.remove_shadow(filt_img)
-	seg_img = MNG.contour.cut_image(seg_img)
+	filt[filt==0] = 255
+	cut = MNG.contour.cut_image(filt)
+	return cut
+	
+for img_name in img_names:
 
-	MNG.save_image(img_name, filt_img, path + '\\preprocessing\\')
-	MNG.save_image(img_name, seg_img, path + '\\segmentation\\')
-
+	filt_img = pre_process(img_name)
+	MNG.save_image(img_name, filt_img, path + '\\preprocessadas\\')
 	MNG.features.extract_features(seg_img, img_name)
 
 file_path = MNG.features.save_data()
-MNG.features.add_target(palmer_sst, tommy_sst)
+MNG.features.add_target(file_path, palmer_sst, tommy_sst)
 MNG.folds = MNGFolds(folder, file_path, k)
 MNG.folds.separate_folds()
 

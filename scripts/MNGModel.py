@@ -41,10 +41,10 @@ class MNGModel():
 			X_train, Y_train 	= self.split_data(train)
 			X_test, Y_test 		= self.split_data(test)
 
-			rf_model 		= RandomForestClassifier(n_estimators=n_trees).fit(X_train, Y_train)
+			rf_model 		= RandomForestRegressor(n_estimators=n_trees).fit(X_train, Y_train)
 			Y_predicted 	= rf_model.predict(X_test)
 			
-			print(rf_model.estimators_)
+			# print(rf_model.estimators_)
 			print(rf_model.feature_importances_)
 
 			r2 		= r2_score(Y_test, Y_predicted)
