@@ -57,9 +57,8 @@ class MNGFeatures():
 		info = list()
 		info = [ind.split('_') for ind in index]
 
-		var = [inf[0] for inf in info]
+		var = [inf[0][4:] for inf in info]
 		sem = [int(inf[1][-1]) for inf in info]
-
 		num = [int(inf[2].split('lado')[0][3:]) for inf in info]
 
 		var = pd.Series(var, index)
@@ -74,7 +73,7 @@ class MNGFeatures():
 		new_data = means.reset_index().drop(columns=['var', 'sem', 'num'])
 
 		new_index = [ind.split('lado')[0] for ind in index]
-		new_index = list(sorted(set(index)))
+		new_index = new_index[::2]
 
 		new_data['ind'] = new_index
 		new_data.set_index('ind', inplace=True)
@@ -91,7 +90,7 @@ class MNGFeatures():
 		att = np.concatenate((att1,att2))
 		data = pd.read_csv(file_path, sep=';', index_col=0)
 
-		data.insert(loc=1, column=self.att, value=att)
+		data.insert(loc=0, column=self.att, value=att)
 		data.to_csv(file_path, sep=';')
 
 	@property
@@ -110,7 +109,6 @@ class MNGFeatures():
 	def current_features_name(self, current_features_name):
 		self._current_features_name = current_features_name
 	
-
 	# def get_feature_method(features):
 	# 	indexes = list()
 
@@ -189,7 +187,7 @@ class MNGFeatures():
 
 			feature_values = list(np.concatenate((means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten()), axis=None))
 
-		elif self.current_features == self.feature_names[18:24]:
+		elif self.current_features == self.feature_names[18:]:
 			means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
 			means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
 			means_n_Lab				= self.features_regions.regions_means(Lab_img, n)

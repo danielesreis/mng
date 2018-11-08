@@ -48,6 +48,6 @@ MNG.folds = MNGFolds(folder, file_path, k)
 MNG.folds.separate_folds()
 
 MNG.model = MNGModel(folder, MNG.folds, model_type, att)
-MNG.model.build_rf_model(model_type)
 
+MNG.model.build_rf_model(model_type)
 MNG.model.build_mlr_model(model_type, features_mlr)
