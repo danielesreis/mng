@@ -1,4 +1,4 @@
 median_filter: 11
 opening: 15
 closing: 13, 75, 81, 95, 135, 215, 300
-shadow: 70, 80, 85, 90, 95, 100
+shadow: 100, 65, 70, 80, 85, 90, 95
