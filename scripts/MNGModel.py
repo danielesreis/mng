@@ -47,7 +47,7 @@ class MNGModel():
 			Y_predicted 	= rf_model.predict(X_test)
 			
 			# print(rf_model.estimators_)
-			# print(rf_model.feature_importances_)
+			print(rf_model.feature_importances_)
 
 			r2 		= r2_score(Y_test, Y_predicted)
 			rmse 	= math.sqrt(mean_squared_error(Y_test, Y_predicted))
