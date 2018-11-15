@@ -14,6 +14,7 @@ tommy_sst 		= 'C:\\Users\\juju-\\Desktop\\projetos\\mng\\tommy_sst.csv'
 path 			= os.getcwd()
 folder 			= path + '\\..\\images\\'
 img_names 		= os.listdir(folder)
+img_names 		= [img.split('.')[0] for img in img_names]
 
 MNG 			= MNG(path, img_names, att)
 
@@ -44,10 +45,10 @@ for img_name in img_names:
 
 file_path = MNG.features.save_data()
 MNG.features.add_target(file_path, palmer_sst, tommy_sst)
-MNG.folds = MNGFolds(folder, file_path, k)
-MNG.folds.separate_folds()
+# MNG.folds = MNGFolds(folder, file_path, k)
+# MNG.folds.separate_folds()
 
-MNG.model = MNGModel(folder, MNG.folds, model_type, att)
+MNG.model = MNGModel(folder, file_path, model_type, att)
 
 MNG.model.build_rf_model(model_type)
 MNG.model.build_mlr_model(model_type, features_mlr)

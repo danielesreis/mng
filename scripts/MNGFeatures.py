@@ -58,7 +58,7 @@ class MNGFeatures():
 		info = [ind.split('_') for ind in index]
 
 		var = [inf[0][4:] for inf in info]
-		sem = [int(inf[1][-1]) for inf in info]
+		sem = [int(inf[1][3:]) for inf in info]
 		num = [int(inf[2].split('lado')[0][3:]) for inf in info]
 
 		var = pd.Series(var, index)
@@ -83,14 +83,14 @@ class MNGFeatures():
 
 		return file_path
 
-	def add_target(self, file_path, target1, target2):
+	def add_target(self, file_path, target1):
 		att1 = pd.read_csv(target1, sep=';')[self.att].values
-		att2 = pd.read_csv(target2, sep=';')[self.att].values
+		# att2 = pd.read_csv(target2, sep=';')[self.att].values
 
-		att = np.concatenate((att1,att2))
+		# att = np.concatenate((att1,att2))
 		data = pd.read_csv(file_path, sep=';', index_col=0)
 
-		data.insert(loc=0, column=self.att, value=att)
+		data.insert(loc=0, column=self.att, value=att1)
 		data.to_csv(file_path, sep=';')
 
 	@property
