@@ -15,7 +15,7 @@ class MNGFeatures():
 	feature_names	= [ 'mean_R_full', 'mean_G_full', 'mean_B_full',															\
 						'mean_H_full', 'mean_S_full', 'mean_V_full',															\
 						'mean_L_full', 'mean_a_full', 'mean_b_full',															\
-						'area', 'diameter',																						\
+						'area', 'height', 'width', 'diameter',																						\
 						'dominant_HSV',																							\
 						'RG_rate', 'RB_rate', 'SH_rate',																		\
 						'long_gradient',																						\
@@ -151,90 +151,91 @@ class MNGFeatures():
 
 			feature_values = list(np.concatenate((means_RGB, means_HSV, means_Lab), axis=None))
 
-		elif self.current_features == self.feature_names[9:11]:
-			area					= self.features_sizes.estimated_area(gray_img)
-			diameter				= self.features_sizes.estimated_diameter(gray_img)
+		elif self.current_features == self.feature_names[9:13]:
+			area					= self.features_size.estimated_area(gray_img)
+			height, width			= self.features_size.estimated_measures(gray_img)
+			diameter				= self.features_size.estimated_diameter(gray_img)
 
-			feature_values = [area, diameter]
+			feature_values = [area, height, width, diameter]
 
-		elif self.current_features == self.feature_names[11:12]:
-			dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
+		# elif self.current_features == self.feature_names[11:12]:
+		# 	dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
 
-			feature_values = dominant_HSV
+		# 	feature_values = dominant_HSV
 
-		elif self.current_features == self.feature_names[12:14]:
-			rates_RGB		 		= self.features_rates.space_rates(RGB_img)
-			rates_HSV				= self.features_rates.space_rates(HSV_img)
+		# elif self.current_features == self.feature_names[12:14]:
+		# 	rates_RGB		 		= self.features_rates.space_rates(RGB_img)
+		# 	rates_HSV				= self.features_rates.space_rates(HSV_img)
 
-			feature_values = [rates_RGB[0], rates_RGB[1], rates_HSV[0]]
+		# 	feature_values = [rates_RGB[0], rates_RGB[1], rates_HSV[0]]
 
-		elif self.current_features == self.feature_names[11:12]:
-			long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
+		# elif self.current_features == self.feature_names[11:12]:
+		# 	long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
 
-			feature_values = long_gradient
+		# 	feature_values = long_gradient
 
-		elif self.current_features == self.feature_names[12:15]:
-			bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
-			cd		  				= self.features_fractal.correlation_dimension(gray_img)
-			dd		  				= self.features_fractal.dilation_dimension(gray_img)
+		# elif self.current_features == self.feature_names[12:15]:
+		# 	bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
+		# 	cd		  				= self.features_fractal.correlation_dimension(gray_img)
+		# 	dd		  				= self.features_fractal.dilation_dimension(gray_img)
 
-			feature_values = [bcd, cd, dd]
+		# 	feature_values = [bcd, cd, dd]
 
-		elif self.current_features == self.feature_names[15:18]:
-			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
-			means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
-			mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
+		# elif self.current_features == self.feature_names[15:18]:
+		# 	means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
+		# 	means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
+		# 	mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
-			feature_values = list(np.concatenate((means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten()), axis=None))
+		# 	feature_values = list(np.concatenate((means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten()), axis=None))
 
-		elif self.current_features == self.feature_names[18:]:
-			means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
-			means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
-			means_n_Lab				= self.features_regions.regions_means(Lab_img, n)
-			means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, n)
-			means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, n)
-			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, n)
+		# elif self.current_features == self.feature_names[18:]:
+		# 	means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
+		# 	means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
+		# 	means_n_Lab				= self.features_regions.regions_means(Lab_img, n)
+		# 	means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, n)
+		# 	means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, n)
+		# 	means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, n)
 
-			feature_values = list(np.concatenate((means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(), means_diffs_n_RGB.flatten(), means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))
+		# 	feature_values = list(np.concatenate((means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(), means_diffs_n_RGB.flatten(), means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))
 			
-		elif self.current_features == self.feature_names:
-			means_RGB 				= self.features_means.channels_mean(RGB_img)
-			means_HSV 				= self.features_means.channels_mean(HSV_img)
-			means_Lab 				= self.features_means.channels_mean(Lab_img)
+		# elif self.current_features == self.feature_names:
+		# 	means_RGB 				= self.features_means.channels_mean(RGB_img)
+		# 	means_HSV 				= self.features_means.channels_mean(HSV_img)
+		# 	means_Lab 				= self.features_means.channels_mean(Lab_img)
 
-			area					= self.features_sizes.estimated_area(gray_img)
-			diameter				= self.features_sizes.estimated_diameter(gray_img)
+		# 	area					= self.features_sizes.estimated_area(gray_img)
+		# 	diameter				= self.features_sizes.estimated_diameter(gray_img)
 
-			dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
+		# 	dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
 
-			rates_RGB		 		= self.features_rates.space_rates(RGB_img)
-			rates_HSV				= self.features_rates.space_rates(HSV_img)
+		# 	rates_RGB		 		= self.features_rates.space_rates(RGB_img)
+		# 	rates_HSV				= self.features_rates.space_rates(HSV_img)
 
-			long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
+		# 	long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
 
-			bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
-			cd		  				= self.features_fractal.correlation_dimension(gray_img)
-			dd		  				= self.features_fractal.dilation_dimension(gray_img)
+		# 	bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
+		# 	cd		  				= self.features_fractal.correlation_dimension(gray_img)
+		# 	dd		  				= self.features_fractal.dilation_dimension(gray_img)
 
-			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
-			means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
-			mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
+		# 	means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
+		# 	means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
+		# 	mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
-			means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
-			means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
-			means_n_Lab				= self.features_regions.regions_means(Lab_img, n)
-			means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, n)
-			means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, n)
-			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, n)
+		# 	means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
+		# 	means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
+		# 	means_n_Lab				= self.features_regions.regions_means(Lab_img, n)
+		# 	means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, n)
+		# 	means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, n)
+		# 	means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, n)
 
-			feature_values = list(np.concatenate((	means_RGB, means_HSV, means_Lab, 																				\
-													[area], [diameter], 																							\
-													[dominant_HSV], 																								\
-													[rates_RGB[0]], [rates_RGB[1]], [rates_HSV[0]], 																\
-													[long_gradient], 																								\
-													[bcd], [cd], [dd], 																								\
-													means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten(), 	\
-													means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(),means_diffs_n_RGB.flatten(), 				\
-													means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))		
+		# 	feature_values = list(np.concatenate((	means_RGB, means_HSV, means_Lab, 																				\
+		# 											[area], [diameter], [height], [width], 																			\
+		# 											[dominant_HSV], 																								\
+		# 											[rates_RGB[0]], [rates_RGB[1]], [rates_HSV[0]], 																\
+		# 											[long_gradient], 																								\
+		# 											[bcd], [cd], [dd], 																								\
+		# 											means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten(), 	\
+		# 											means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(),means_diffs_n_RGB.flatten(), 				\
+		# 											means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))		
 
 		self.insert_feature_row(img_name, feature_values)
