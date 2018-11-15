@@ -53,7 +53,6 @@ class MNGModel():
 		# print(rf_model.estimators_)
 		print(rf_model.feature_importances_)
 		r2 	= r2_score(Y_test, Y_predicted)
-		# print(r2, scipy.stats.pearsonr(Y_test, Y_predicted)[0], math.sqrt(r2))
 		rmse= math.sqrt(mean_squared_error(Y_test, Y_predicted))
 
 		self.save_results('rf_'+str(n_trees), model_type, r2, rmse)
