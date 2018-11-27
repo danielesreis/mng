@@ -27,10 +27,10 @@ class MNGFeatures():
 						'apex_equator_B_diff', 'equator_stalk_B_diff', 'apex_stalk_B_diff']										\
 
 	def new_df(self):
-		self.data = pd.DataFrame(index=self.image_names, columns=self.current_features, dtype=np.float64)
+		self.data = pd.DataFrame(index=self.image_names, columns=[self.current_features], dtype=np.float64)
 
 	def insert_feature_row(self, img_name, feature_values):
-		feature_row = pd.Series(data=feature_values, index=self.current_features, name=img_name.split('.')[0])
+		feature_row = pd.Series(data=feature_values, index=[self.current_features], name=img_name.split('.')[0])
 		self.data.loc[img_name.split('.')[0]] = feature_row
 
 	def save_data(self):
@@ -158,16 +158,15 @@ class MNGFeatures():
 
 			feature_values = [area, height, width, diameter]
 
-		# elif self.current_features == self.feature_names[11:12]:
-		# 	dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
+		elif self.current_features == self.feature_names[13]:
+			dominant_HSV 			= self.features_dominant.dominant_HSV_color(HSV_img)
+			feature_values = dominant_HSV
 
-		# 	feature_values = dominant_HSV
+		elif self.current_features == self.feature_names[14:17]:
+			rates_RGB		 		= self.features_rates.space_rates(RGB_img)
+			rates_HSV				= self.features_rates.space_rates(HSV_img)
 
-		# elif self.current_features == self.feature_names[12:14]:
-		# 	rates_RGB		 		= self.features_rates.space_rates(RGB_img)
-		# 	rates_HSV				= self.features_rates.space_rates(HSV_img)
-
-		# 	feature_values = [rates_RGB[0], rates_RGB[1], rates_HSV[0]]
+			feature_values = [rates_RGB[0], rates_RGB[1], rates_HSV[0]]
 
 		# elif self.current_features == self.feature_names[11:12]:
 		# 	long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
