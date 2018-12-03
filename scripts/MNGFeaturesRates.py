@@ -7,5 +7,5 @@ class MNGFeaturesRates():
 
 	def space_rates(self, img):
 		means 	= self.features_means.channels_mean(img)
-		rates 	= np.array([mean[0]/mean[1], mean[0]/mean[2], mean[1]/mean[2]])
+		rates 	= np.array([means[0]/means[1], means[0]/means[2], means[1]/means[2]])
 		return rates

@@ -129,7 +129,7 @@ class MNGFeatures():
 		self.features_dominant	= MNGFeaturesDominantColor(self.features_means)
 		self.features_rates		= MNGFeaturesRates(self.features_means)
 		self.features_gradient	= MNGFeaturesGradient()
-		self.features_regions	= MNGFeaturesRegions(self.features_means)
+		self.features_regions	= MNGFeaturesRegions()
 		self.features_fractal	= MNGFeaturesFractal()
 
 		self._current_features  	= None

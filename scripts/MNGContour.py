@@ -7,8 +7,6 @@ class MNGContour():
 		imgray 				= cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
 		__, thresh 			= cv2.threshold(imgray, 127, 255, 0)
 		__, contours, __	= cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-		print(len(contours))
-		# print(contours)
 		return contours
 
 	def get_bounding_box(self, img, contours):
