@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 
 class MNGFeaturesFractal():
 
@@ -35,7 +36,7 @@ class MNGFeaturesFractal():
 		n_pixels 			= data.shape[0]
 		data_shifted 		= data[1:]
 		data 				= data[0:n_pixels-1]
-		data_subtracted		= data - data_shifteda
+		data_subtracted		= data - data_shifted
 
 		dists = np.linspace(0.1, 1, 5)
 

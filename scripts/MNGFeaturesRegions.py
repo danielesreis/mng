@@ -1,20 +1,23 @@
 import math
+import cv2
 import numpy as np
 
 class MNGFeaturesRegions():
 
-	def __init__(self, feature_means):
+	def __init__(self, feature_means, n):
 		self.feature_means 	= feature_means
+		self.n 				= n
 
-	def regions_means(self, img, n=5):
+	def regions_means(self, img, n):
+		gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][0]
 			return i
 
 		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][-1]
 			return i
 
@@ -27,12 +30,12 @@ class MNGFeaturesRegions():
 			y_i 	= i * slice_height + skip
 			y_f 	= y_i + slice_height if i != n-1 else height-1
 
-			x_0		= first_nonwhite_pixel(img, y_i, 'y')
-			x_1		= first_nonwhite_pixel(img, y_f, 'y')
+			x_0		= first_nonwhite_pixel(gray_img, y_i, 'y')
+			x_1		= first_nonwhite_pixel(gray_img, y_f, 'y')
 			x_i		= x_0 if x_0 > x_1 else x_0
 
-			x_0		= last_nonwhite_pixel(img, y_i, 'y')
-			x_1		= last_nonwhite_pixel(img, y_f, 'y')
+			x_0		= last_nonwhite_pixel(gray_img, y_i, 'y')
+			x_1		= last_nonwhite_pixel(gray_img, y_f, 'y')
 			x_f		= x_0 if x_0 < x_1 else x_0
 
 			means = self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
@@ -44,7 +47,7 @@ class MNGFeaturesRegions():
 
 		return reg_means
 
-	def regions_mean_diffs(self, img, n=5):	
+	def regions_mean_diffs(self, img, n):	
 		means = self.regions_means(img, n)
 
 		for i in range(n-1):
@@ -70,12 +73,12 @@ class MNGFeaturesRegions():
 	def apex_means(self, img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
 
 		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][0]
 			return i
 
 		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][-1]
 			return i
 
@@ -100,14 +103,15 @@ class MNGFeaturesRegions():
 		return mean_apex
 
 	def equator_means(self, img, HEIGHT_FRACTION=0.05):
+		gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][0]
 			return i
 
 		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][-1]
 			return i
 
@@ -118,12 +122,12 @@ class MNGFeaturesRegions():
 		y_f						= y_c + slice_height
 		y_i						= y_c - slice_height
 
-		x_0						= first_nonwhite_pixel(img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(img, y_f, 'y')
+		x_0						= first_nonwhite_pixel(gray_img, y_i, 'y')
+		x_1						= first_nonwhite_pixel(gray_img, y_f, 'y')
 		x_i						= x_0 if x_0 > x_1 else x_0
 
-		x_0						= last_nonwhite_pixel(img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(img, y_f, 'y')
+		x_0						= last_nonwhite_pixel(gray_img, y_i, 'y')
+		x_1						= last_nonwhite_pixel(gray_img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_1 else x_0
 
 		means 			= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
@@ -132,14 +136,15 @@ class MNGFeaturesRegions():
 		return mean_equator
 
 	def stalk_means(self, img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
+		gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][0]
 			return i
 
 		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:,0] if axis == 'y' else img[:,known_point,0]
+			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
 			i 		= np.where(data != 255)[0][-1]
 			return i
 
@@ -150,12 +155,12 @@ class MNGFeaturesRegions():
 		y_f						= y_c + slice_height
 		y_i						= y_c - slice_height
 		
-		x_0						= first_nonwhite_pixel(img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(img, y_f, 'y')
+		x_0						= first_nonwhite_pixel(gray_img, y_i, 'y')
+		x_1						= first_nonwhite_pixel(gray_img, y_f, 'y')
 		x_i						= x_0 if x_0 > x_1 else x_0
 
-		x_0						= last_nonwhite_pixel(img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(img, y_f, 'y')
+		x_0						= last_nonwhite_pixel(gray_img, y_i, 'y')
+		x_1						= last_nonwhite_pixel(gray_img, y_f, 'y')
 		x_f						= x_0 if x_0 < x_1 else x_0
 
 		means 		= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
@@ -188,7 +193,7 @@ class MNGFeaturesRegions():
 		names_HSV = []
 		names_Lab = []
 
-		for region in range(n):
+		for region in range(self.n):
 			for channel in channels_RGB:
 				names_RGB.append('region_' + str(region) + '_' + channel)
 
@@ -213,8 +218,8 @@ class MNGFeaturesRegions():
 		names_HSV = []
 		names_Lab = []
 
-		for i in range(n-1):
-			for j in range(i, n-1):
+		for i in range(self.n-1):
+			for j in range(i, self.n-1):
 				for channel in channels_RGB:
 					names_RGB.append(str(i) + '_' + str(j+1) + '_' + channel + '_diff')
 

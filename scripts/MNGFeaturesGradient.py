@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import cv2
 
 from sklearn.metrics import mean_squared_error
@@ -53,16 +54,16 @@ class MNGFeaturesGradient():
 		data 		= np.mean(l_slice, axis=1)
 		X, Y 		= get_X_Y(data)
 
-		return np.array([x_i,x_f,y_i,y_f])
+		# return np.array([x_i,x_f,y_i,y_f])
 	
-		# REG 	= [LinearRegression().fit(X, y) for y in Y]
-		# PRED 	= [reg.predict(X) for reg in REG]
+		REG 	= [LinearRegression().fit(X, y) for y in Y]
+		PRED 	= [reg.predict(X) for reg in REG]
 
-		# MSE 	= list()
-		# for i in range(3):
-		#     MSE.append(mean_squared_error(Y[i], PRED[i]))
+		MSE 	= list()
+		for i in range(3):
+		    MSE.append(mean_squared_error(Y[i], PRED[i]))
 		    
-		# ind 		= MSE.index(min(MSE))
-		# gradient 	= REG[ind].coef_[0]
+		ind 		= MSE.index(min(MSE))
+		gradient 	= REG[ind].coef_[0]
 
-		# return gradient
+		return gradient

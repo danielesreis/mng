@@ -119,17 +119,18 @@ class MNGFeatures():
 	# 	methods = [self.feature_methods[index] for index in indexes]
 	# 	return methods
 
-	def __init__(self, folder, image_names, att):
+	def __init__(self, folder, image_names, att, n=5):
 		self.dest_folder 		= folder + '..\\features\\'
 		self.image_names		= [image_name.split('.')[0] for image_name in image_names]
 		self.att 				= att
+		self.n 					= n
 
 		self.features_means		= MNGFeaturesMeans()
 		self.features_size 		= MNGFeaturesSize()
 		self.features_dominant	= MNGFeaturesDominantColor(self.features_means)
 		self.features_rates		= MNGFeaturesRates(self.features_means)
 		self.features_gradient	= MNGFeaturesGradient()
-		self.features_regions	= MNGFeaturesRegions()
+		self.features_regions	= MNGFeaturesRegions(self.features_means, n)
 		self.features_fractal	= MNGFeaturesFractal()
 
 		self._current_features  	= None
@@ -168,34 +169,34 @@ class MNGFeatures():
 
 			feature_values = [rates_RGB[0], rates_RGB[1], rates_HSV[0]]
 
-		# elif self.current_features == self.feature_names[11:12]:
-		# 	long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
+		elif self.current_features == self.feature_names[17]:
+			long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
 
-		# 	feature_values = long_gradient
+			feature_values = long_gradient
 
-		# elif self.current_features == self.feature_names[12:15]:
-		# 	bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
-		# 	cd		  				= self.features_fractal.correlation_dimension(gray_img)
-		# 	dd		  				= self.features_fractal.dilation_dimension(gray_img)
+		elif self.current_features == self.feature_names[18:21]:
+			bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
+			cd		  				= self.features_fractal.correlation_dimension(gray_img)
+			dd		  				= self.features_fractal.dilation_dimension(gray_img)
 
-		# 	feature_values = [bcd, cd, dd]
+			feature_values = [bcd, cd, dd]
 
-		# elif self.current_features == self.feature_names[15:18]:
-		# 	means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
-		# 	means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
-		# 	mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
+		elif self.current_features == self.feature_names[21:42]:
+			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
+			means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(RGB_img)
+			mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
-		# 	feature_values = list(np.concatenate((means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten()), axis=None))
+			feature_values = list(np.concatenate((means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten()), axis=None))
 
-		# elif self.current_features == self.feature_names[18:]:
-		# 	means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
-		# 	means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
-		# 	means_n_Lab				= self.features_regions.regions_means(Lab_img, n)
-		# 	means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, n)
-		# 	means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, n)
-		# 	means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, n)
+		elif self.current_features == self.feature_names[42:]:
+			means_n_RGB				= self.features_regions.regions_means(RGB_img, self.n)
+			means_n_HSV				= self.features_regions.regions_means(HSV_img, self.n)
+			means_n_Lab				= self.features_regions.regions_means(Lab_img, self.n)
+			means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, self.n)
+			means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, self.n)
+			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, self.n)
 
-		# 	feature_values = list(np.concatenate((means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(), means_diffs_n_RGB.flatten(), means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))
+			feature_values = list(np.concatenate((means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(), means_diffs_n_RGB.flatten(), means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))
 			
 		# elif self.current_features == self.feature_names:
 		# 	means_RGB 				= self.features_means.channels_mean(RGB_img)
