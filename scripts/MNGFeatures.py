@@ -175,9 +175,9 @@ class MNGFeatures():
 			feature_values = long_gradient
 
 		elif self.current_features == self.feature_names[18:21]:
+			dd		  				= self.features_fractal.dilation_dimension(gray_img)
 			bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
 			cd		  				= self.features_fractal.correlation_dimension(gray_img)
-			dd		  				= self.features_fractal.dilation_dimension(gray_img)
 
 			feature_values = [bcd, cd, dd]
 

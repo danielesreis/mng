@@ -75,12 +75,13 @@ class MNGFeaturesFractal():
 				new_k = cv2.circle(k,(int(k_size/2),int(k_size/2)), r, 1, -1)
 				res = cv2.filter2D(gray_img, -1, new_k)
 				sums.append(sum(sum(res)))
-
+			return sums
+			
 		h, w 	= gray_img.shape
 		img 	= invert_colors(gray_img)
 
 		radius 			= get_radius_array(gray_img, h, w)
-		diameters 		= radius*2
+		diameters 		= np.array(list(radius*2))
 		max_diameter 	= max(diameters)
 		
 		k_size 		= max_diameter-max_diameter%100+100
