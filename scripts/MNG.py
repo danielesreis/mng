@@ -5,12 +5,12 @@ from MNGFeatures import MNGFeatures
 
 class MNG(): 
 
-	def __init__(self, folder, image_names, att):
+	def __init__(self, folder, image_names, att, n):
 		self.folder				= folder
 		self.segmentation 		= MNGSegmentation()
 		self.preprocessing 		= MNGPreProcessing(self.segmentation)
 		self.contour 			= MNGContour()
-		self.features 			= MNGFeatures(folder, image_names, att)
+		self.features 			= MNGFeatures(folder, image_names, att, n)
 		self._folds 			= None
 		self._model 			= None
 

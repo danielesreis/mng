@@ -8,17 +8,23 @@ class MNGFeaturesRegions():
 		self.feature_means 	= feature_means
 		self.n 				= n
 
-	def regions_means(self, img, n):
-		gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	def regions_means(self, img, gray_img, n):
+		def first_nonwhite_pixel(known_point, axis):
+			data 	= gray_img[known_point,:] if axis == 'y' else gray_img[:,known_point]
 
-		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][0]
+			if sum(data) == 255*data.shape[0]:
+				data = gray_img[known_point+1,:] if axis == 'y' else gray_img[:,known_point+1]
+
+			i = np.where(data != 255)[0][0]
 			return i
 
-		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][-1]
+		def last_nonwhite_pixel(known_point, axis):
+			data 	= gray_img[known_point,:] if axis == 'y' else gray_img[:,known_point]
+
+			if sum(data) == 255*data.shape[0]:
+				data = gray_img[known_point+1,:] if axis == 'y' else gray_img[:,known_point+1]
+
+			i = np.where(data != 255)[0][-1]
 			return i
 
 		height, width, __ 	= img.shape
@@ -30,12 +36,12 @@ class MNGFeaturesRegions():
 			y_i 	= i * slice_height + skip
 			y_f 	= y_i + slice_height if i != n-1 else height-1
 
-			x_0		= first_nonwhite_pixel(gray_img, y_i, 'y')
-			x_1		= first_nonwhite_pixel(gray_img, y_f, 'y')
+			x_0		= first_nonwhite_pixel(y_i, 'y')
+			x_1		= first_nonwhite_pixel(y_f, 'y')
 			x_i		= x_0 if x_0 > x_1 else x_0
 
-			x_0		= last_nonwhite_pixel(gray_img, y_i, 'y')
-			x_1		= last_nonwhite_pixel(gray_img, y_f, 'y')
+			x_0		= last_nonwhite_pixel(y_i, 'y')
+			x_1		= last_nonwhite_pixel(y_f, 'y')
 			x_f		= x_0 if x_0 < x_1 else x_0
 
 			means = self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
@@ -47,8 +53,8 @@ class MNGFeaturesRegions():
 
 		return reg_means
 
-	def regions_mean_diffs(self, img, n):	
-		means = self.regions_means(img, n)
+	def regions_mean_diffs(self, img, gray_img, n):	
+		means = self.regions_means(img, gray_img, n)
 
 		for i in range(n-1):
 			for j in np.arange(i,n-1):
@@ -59,14 +65,14 @@ class MNGFeaturesRegions():
 
 		return regions_diffs
 
-	def mean_diffs(self, img, n):
+	def mean_diffs(self, img, gray_img, n):
 
 		if n == 1:
 			means = self.feature_means.channels_mean(img)
 			diffs = np.array([means[0]-means[1], means[0]-means[2], means[1]-means[2]])
 
 		else:
-			diffs = self.regions_mean_diffs(img, n)
+			diffs = self.regions_mean_diffs(img, gray_img, n)
 
 		return diffs
 

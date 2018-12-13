@@ -181,6 +181,7 @@ class MNGFeatures():
 
 			feature_values = [bcd, cd, dd]
 
+		# You must pass gray_img as parameters as well, just the way you did for the next group of variables
 		elif self.current_features == self.feature_names[21:42]:
 			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
 			means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(RGB_img)
@@ -189,12 +190,12 @@ class MNGFeatures():
 			feature_values = list(np.concatenate((means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten()), axis=None))
 
 		elif self.current_features == self.feature_names[42:]:
-			means_n_RGB				= self.features_regions.regions_means(RGB_img, self.n)
-			means_n_HSV				= self.features_regions.regions_means(HSV_img, self.n)
-			means_n_Lab				= self.features_regions.regions_means(Lab_img, self.n)
-			means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, self.n)
-			means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, self.n)
-			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, self.n)
+			means_n_RGB				= self.features_regions.regions_means(RGB_img, gray_img, self.n)
+			means_n_HSV				= self.features_regions.regions_means(HSV_img, gray_img, self.n)
+			means_n_Lab				= self.features_regions.regions_means(Lab_img, gray_img, self.n)
+			means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, gray_img, self.n)
+			means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, gray_img, self.n)
+			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, gray_img, self.n)
 
 			feature_values = list(np.concatenate((means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(), means_diffs_n_RGB.flatten(), means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))
 			
