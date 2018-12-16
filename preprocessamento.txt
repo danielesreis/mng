@@ -1,4 +1,5 @@
-median_filter: 11
-opening: 15
-closing: 13, 75, 81, 95, 135, 215, 300
-shadow: 100, 65, 70, 80, 85, 90, 95
+median_filter: 5, 11
+opening: 15, 21, 29, 31, 105 
+closing: 13, 21, 31, 75, 81, 95, 135, 215, 300
+shadow (greyscale): 100, 55, 50, 65, 70, 80, 85, 90, 95
+shadow (B channel): 60, 65
