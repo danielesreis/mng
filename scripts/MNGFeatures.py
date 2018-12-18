@@ -33,10 +33,11 @@ class MNGFeatures():
 		feature_row = pd.Series(data=feature_values, index=[self.current_features], name=img_name.split('.')[0])
 		self.data.loc[img_name.split('.')[0]] = feature_row
 
-	def save_data(self):
+	def save_data(self, to_edit):
 		file_path = self.dest_folder + self.current_features_name + '_all.csv'
 		self.data.to_csv(file_path, sep=';')
-		file_path = self.edit_data_frame()
+		if to_edit:
+			file_path = self.edit_data_frame()
 		return file_path
 
 	def edit_feature_names(self):
