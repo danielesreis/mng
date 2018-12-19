@@ -9,47 +9,27 @@ class MNGFeaturesRegions():
 		self.n 				= n
 
 	def regions_means(self, img, gray_img, n):
-		def first_nonwhite_pixel(known_point, axis):
-			data 	= gray_img[known_point,:] if axis == 'y' else gray_img[:,known_point]
-
-			if sum(data) == 255*data.shape[0]:
-				data = gray_img[known_point+1,:] if axis == 'y' else gray_img[:,known_point+1]
-
-			i = np.where(data != 255)[0][0]
-			return i
-
-		def last_nonwhite_pixel(known_point, axis):
-			data 	= gray_img[known_point,:] if axis == 'y' else gray_img[:,known_point]
-
-			if sum(data) == 255*data.shape[0]:
-				data = gray_img[known_point+1,:] if axis == 'y' else gray_img[:,known_point+1]
-
-			i = np.where(data != 255)[0][-1]
-			return i
-
 		height, width, __ 	= img.shape
-		slice_height 		= round(height/n)
+		slice_height 		= math.floor(height/n)
 
-		for i in range(n):
-			skip 	= 1 if i > 0 else 0
+		y_i = 0
+		y_f = slice_height
 
+		means = self.feature_means.channels_mean(img[y_i:y_f,:,:])
+		reg_means = np.array([[means[0], means[1], means[2]]])
+
+		skip = 1
+		for i in range(1,n-1,1):
 			y_i 	= i * slice_height + skip
-			y_f 	= y_i + slice_height if i != n-1 else height-1
+			y_f 	= y_i + slice_height
 
-			x_0		= first_nonwhite_pixel(y_i, 'y')
-			x_1		= first_nonwhite_pixel(y_f, 'y')
-			x_i		= x_0 if x_0 > x_1 else x_0
+			means = self.feature_means.channels_mean(img[y_i:y_f,:,:])
+			reg_means = np.append(reg_means, [[means[0], means[1], means[2]]], axis=0)
 
-			x_0		= last_nonwhite_pixel(y_i, 'y')
-			x_1		= last_nonwhite_pixel(y_f, 'y')
-			x_f		= x_0 if x_0 < x_1 else x_0
+		y_i = y_f + 1
 
-			means = self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
-
-			if i == 0:
-				reg_means = np.array([[means[0], means[1], means[2]]])
-			else:
-				reg_means = np.append(reg_means, [[means[0], means[1], means[2]]], axis=0)
+		means = self.feature_means.channels_mean(img[y_i:,:,:])
+		reg_means = np.append(reg_means, [[means[0], means[1], means[2]]], axis=0)
 
 		return reg_means
 
@@ -66,7 +46,6 @@ class MNGFeaturesRegions():
 		return regions_diffs
 
 	def mean_diffs(self, img, gray_img, n):
-
 		if n == 1:
 			means = self.feature_means.channels_mean(img)
 			diffs = np.array([means[0]-means[1], means[0]-means[2], means[1]-means[2]])
@@ -78,98 +57,87 @@ class MNGFeaturesRegions():
 
 	def apex_means(self, img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
 
-		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][0]
-			return i
+		def first_last_nonwhite_pixel(known_point):
+			data = img[known_point,:]
+			first_nonwhite_pixel = np.where(data != 255)[0]
 
-		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][-1]
-			return i
+			data = data[::-1]
+			last_nonwhite_pixel = np.where(data != 255)[0]
 
-		height, width, __ 		= img.shape
+			return first_nonwhite_pixel[0], last_nonwhite_pixel[0]
 
-		y_c						= round(OFFSET_Y_apex_stalk * height)
-		slice_height 			= round(height * HEIGHT_FRACTION / 2)
-		y_f						= y_c + slice_height
-		y_i						= y_c - slice_height
+		height, width, __ 	= img.shape
 
-		x_0						= first_nonwhite_pixel(img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(img, y_f, 'y')
-		x_i						= x_0 if x_0 > x_1 else x_0
+		y_c					= round(OFFSET_Y_apex_stalk * height)
+		slice_height 		= round(height * HEIGHT_FRACTION / 2)
+		y_f					= y_c + slice_height
+		y_i					= y_c - slice_height
 
-		x_0						= last_nonwhite_pixel(img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(img, y_f, 'y')
-		x_f						= x_0 if x_0 < x_1 else x_0
+		xi_0,xi_1			= first_last_nonwhite_pixel(y_i)
+		xf_0,xf_1			= first_last_nonwhite_pixel(y_f)
+		
+		x_i					= xi_0 if xi_0 > xf_0 else xf_0
+		x_f					= xi_1 if xi_1 < xf_1 else xf_1
 
-		means 		= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
+		means 		= self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
 		mean_apex 	= np.array([means[0], means[1], means[2]])
 
 		return mean_apex
 
 	def equator_means(self, img, HEIGHT_FRACTION=0.05):
-		gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][0]
-			return i
+		def first_last_nonwhite_pixel(known_point):
+			data = img[known_point,:]
+			first_nonwhite_pixel = np.where(data != 255)[0]
 
-		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][-1]
-			return i
+			data = data[::-1]
+			last_nonwhite_pixel = np.where(data != 255)[0]
 
-		height, width, __ 		= img.shape
+			return first_nonwhite_pixel[0], last_nonwhite_pixel[0]
 
-		y_c						= round(height / 2)
-		slice_height 			= round(height * HEIGHT_FRACTION / 2)
-		y_f						= y_c + slice_height
-		y_i						= y_c - slice_height
+		height, width, __ 	= img.shape
 
-		x_0						= first_nonwhite_pixel(gray_img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(gray_img, y_f, 'y')
-		x_i						= x_0 if x_0 > x_1 else x_0
+		y_c					= round(height / 2)
+		slice_height 		= round(height * HEIGHT_FRACTION / 2)
+		y_f					= y_c + slice_height
+		y_i					= y_c - slice_height
 
-		x_0						= last_nonwhite_pixel(gray_img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(gray_img, y_f, 'y')
-		x_f						= x_0 if x_0 < x_1 else x_0
+		xi_0,xi_1			= first_last_nonwhite_pixel(y_i)
+		xf_0,xf_1			= first_last_nonwhite_pixel(y_f)
 
-		means 			= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
+		x_i					= xi_0 if xi_0 > xf_0 else xf_0
+		x_f					= xi_1 if xi_1 < xf_1 else xf_1
+
+		means 			= self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
 		mean_equator	= np.array([means[0], means[1], means[2]])
 
 		return mean_equator
 
 	def stalk_means(self, img, OFFSET_Y_apex_stalk=0.15, HEIGHT_FRACTION=0.05):
-		gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-		def first_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][0]
-			return i
+		def first_last_nonwhite_pixel(known_point):
+			data = img[known_point,:]
+			first_nonwhite_pixel = np.where(data != 255)[0]
 
-		def last_nonwhite_pixel(img, known_point, axis):
-			data 	= img[known_point,:] if axis == 'y' else img[:,known_point]
-			i 		= np.where(data != 255)[0][-1]
-			return i
+			data = data[::-1]
+			last_nonwhite_pixel = np.where(data != 255)[0]
 
-		height, width, __ 		= img.shape
+			return first_nonwhite_pixel[0], last_nonwhite_pixel[0]
 
-		y_c						= height - round(OFFSET_Y_apex_stalk * height)
-		slice_height 			= round(height * HEIGHT_FRACTION / 2)
-		y_f						= y_c + slice_height
-		y_i						= y_c - slice_height
+		height, width, __ 	= img.shape
+
+		y_c					= height - round(OFFSET_Y_apex_stalk * height)
+		slice_height 		= round(height * HEIGHT_FRACTION / 2)
+		y_f					= y_c + slice_height
+		y_i					= y_c - slice_height
 		
-		x_0						= first_nonwhite_pixel(gray_img, y_i, 'y')
-		x_1						= first_nonwhite_pixel(gray_img, y_f, 'y')
-		x_i						= x_0 if x_0 > x_1 else x_0
+		xi_0,xi_1			= first_last_nonwhite_pixel(y_i)
+		xf_0,xf_1			= first_last_nonwhite_pixel(y_f)
 
-		x_0						= last_nonwhite_pixel(gray_img, y_i, 'y')
-		x_1						= last_nonwhite_pixel(gray_img, y_f, 'y')
-		x_f						= x_0 if x_0 < x_1 else x_0
+		x_i					= xi_0 if xi_0 > xf_0 else xf_0
+		x_f					= xi_1 if xi_1 < xf_1 else xf_1
 
-		means 		= self.feature_means.channels_mean(img[y_i:y_f, x_i:x_f])
+		means 		= self.feature_means.channels_mean(img[y_i:y_f,x_i:x_f,:])
 		mean_stalk 	= np.array([means[0], means[1], means[2]])
 
 		return mean_stalk

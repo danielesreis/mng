@@ -184,7 +184,7 @@ class MNGFeatures():
 
 		# You must pass gray_img as parameters as well, just the way you did for the next group of variables
 		elif self.current_features == self.feature_names[21:42]:
-			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
+			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, gray_img, 1)
 			means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(RGB_img)
 			mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
