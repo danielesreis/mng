@@ -59,12 +59,9 @@ class MNGFeaturesRegions():
 
 		def first_last_nonwhite_pixel(known_point):
 			data = img[known_point,:]
-			first_nonwhite_pixel = np.where(data != 255)[0]
+			nonwhite_pixels = np.where(data != 255)[0]
 
-			data = data[::-1]
-			last_nonwhite_pixel = np.where(data != 255)[0]
-
-			return first_nonwhite_pixel[0], last_nonwhite_pixel[0]
+			return nonwhite_pixels[0], nonwhite_pixels[-1]
 
 		height, width, __ 	= img.shape
 
@@ -88,12 +85,9 @@ class MNGFeaturesRegions():
 
 		def first_last_nonwhite_pixel(known_point):
 			data = img[known_point,:]
-			first_nonwhite_pixel = np.where(data != 255)[0]
+			nonwhite_pixels = np.where(data != 255)[0]
 
-			data = data[::-1]
-			last_nonwhite_pixel = np.where(data != 255)[0]
-
-			return first_nonwhite_pixel[0], last_nonwhite_pixel[0]
+			return nonwhite_pixels[0], nonwhite_pixels[-1]
 
 		height, width, __ 	= img.shape
 
@@ -117,12 +111,9 @@ class MNGFeaturesRegions():
 
 		def first_last_nonwhite_pixel(known_point):
 			data = img[known_point,:]
-			first_nonwhite_pixel = np.where(data != 255)[0]
+			nonwhite_pixels = np.where(data != 255)[0]
 
-			data = data[::-1]
-			last_nonwhite_pixel = np.where(data != 255)[0]
-
-			return first_nonwhite_pixel[0], last_nonwhite_pixel[0]
+			return nonwhite_pixels[0], nonwhite_pixels[-1]
 
 		height, width, __ 	= img.shape
 
