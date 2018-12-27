@@ -4,8 +4,5 @@ preprocessadas2/
 features/
 features2/
 reference_values/
-palmer_time.csv
-palmer_sst.csv
-palmer_firmeza.csv
-palmer_all_ref_values.csv
+resampling
 dados_sst.xls
