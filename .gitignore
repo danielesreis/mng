@@ -6,3 +6,5 @@ features2/
 reference_values/
 resampling
 dados_sst.xls
+dados_predict.csv
+real_repeated.csv
