@@ -4,7 +4,9 @@ preprocessadas2/
 features/
 features2/
 reference_values/
-resampling
+resampling/
 dados_sst.xls
 dados_predict.csv
 real_repeated.csv
+results/
+predictions/
