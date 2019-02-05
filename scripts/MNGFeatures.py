@@ -35,7 +35,7 @@ class MNGFeatures():
 
 	def save_data(self, to_edit):
 		file_path = self.dest_folder + self.current_features_name + '_all.csv'
-		self.data.to_csv(file_path, sep=';')
+		self.data.to_csv(file_path, sep=',')
 		if to_edit:
 			file_path = self.edit_data_frame()
 		return file_path
@@ -51,9 +51,10 @@ class MNGFeatures():
 		self.feature_names = [item for sublist in self.feature_names for item in sublist]
 
 	def edit_data_frame(self):
-		new_data = self.data.copy()
-		columns = self.data.columns
-		index = self.data.index.values
+		df = pd.read_csv(self.dest_folder + self.current_features_name + '_all.csv', index_col=0)
+		new_data = df.copy()
+		columns = df.columns
+		index = df.index.values
 
 		info = list()
 		info = [ind.split('_') for ind in index]
@@ -121,7 +122,7 @@ class MNGFeatures():
 	# 	return methods
 
 	def __init__(self, folder, image_names, att, n=5):
-		self.dest_folder 		= folder + '..\\features\\'
+		self.dest_folder 		= folder + '..//features//'
 		self.image_names		= [image_name.split('.')[0] for image_name in image_names]
 		self.att 				= att
 		self.n 					= n
@@ -199,45 +200,46 @@ class MNGFeatures():
 			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, gray_img, self.n)
 
 			feature_values = list(np.concatenate((means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(), means_diffs_n_RGB.flatten(), means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))
-			
-		# elif self.current_features == self.feature_names:
-		# 	means_RGB 				= self.features_means.channels_mean(RGB_img)
-		# 	means_HSV 				= self.features_means.channels_mean(HSV_img)
-		# 	means_Lab 				= self.features_means.channels_mean(Lab_img)
 
-		# 	area					= self.features_sizes.estimated_area(gray_img)
-		# 	diameter				= self.features_sizes.estimated_diameter(gray_img)
+		elif self.current_features == 'all':
+			means_RGB 				= self.features_means.channels_mean(RGB_img)
+			means_HSV 				= self.features_means.channels_mean(HSV_img)
+			means_Lab 				= self.features_means.channels_mean(Lab_img)
 
-		# 	dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
+			area					= self.features_size.estimated_area(gray_img)
+			height, width			= self.features_size.estimated_measures(gray_img)
+			diameter				= self.features_size.estimated_diameter(gray_img)
 
-		# 	rates_RGB		 		= self.features_rates.space_rates(RGB_img)
-		# 	rates_HSV				= self.features_rates.space_rates(HSV_img)
+			dominant_HSV		  	= self.features_dominant.dominant_HSV_color(HSV_img)
 
-		# 	long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
+			rates_RGB		 		= self.features_rates.space_rates(RGB_img)
+			rates_HSV				= self.features_rates.space_rates(HSV_img)
 
-		# 	bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
-		# 	cd		  				= self.features_fractal.correlation_dimension(gray_img)
-		# 	dd		  				= self.features_fractal.dilation_dimension(gray_img)
+			long_gradient			= self.features_gradient.longitudinal_gradient(RGB_img)
 
-		# 	means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, 1)
-		# 	means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(img)
-		# 	mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
+			bcd		  	 			= self.features_fractal.box_counting_dimension(gray_img)
+			cd		  				= self.features_fractal.correlation_dimension(gray_img)
+			dd		  				= self.features_fractal.dilation_dimension(gray_img)
 
-		# 	means_n_RGB				= self.features_regions.regions_means(RGB_img, n)
-		# 	means_n_HSV				= self.features_regions.regions_means(HSV_img, n)
-		# 	means_n_Lab				= self.features_regions.regions_means(Lab_img, n)
-		# 	means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, n)
-		# 	means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, n)
-		# 	means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, n)
+			means_diffs_full 					= self.features_regions.mean_diffs(RGB_img, gray_img, 1)
+			means_apex_equator_stalk 			= self.features_regions.apex_equator_stalk_means(RGB_img)
+			mean_diffs_apex_equator_stalk_RGB	= self.features_regions.regions_means_diffs(RGB_img)
 
-		# 	feature_values = list(np.concatenate((	means_RGB, means_HSV, means_Lab, 																				\
-		# 											[area], [diameter], [height], [width], 																			\
-		# 											[dominant_HSV], 																								\
-		# 											[rates_RGB[0]], [rates_RGB[1]], [rates_HSV[0]], 																\
-		# 											[long_gradient], 																								\
-		# 											[bcd], [cd], [dd], 																								\
-		# 											means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten(), 	\
-		# 											means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(),means_diffs_n_RGB.flatten(), 				\
-		# 											means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))		
+			means_n_RGB				= self.features_regions.regions_means(RGB_img, gray_img, self.n)
+			means_n_HSV				= self.features_regions.regions_means(HSV_img, gray_img, self.n)
+			means_n_Lab				= self.features_regions.regions_means(Lab_img, gray_img, self.n)
+			means_diffs_n_RGB		= self.features_regions.mean_diffs(RGB_img, gray_img, self.n)
+			means_diffs_n_HSV		= self.features_regions.mean_diffs(HSV_img, gray_img, self.n)
+			means_diffs_n_Lab		= self.features_regions.mean_diffs(Lab_img, gray_img, self.n)
+
+			feature_values = list(np.concatenate((	means_RGB, means_HSV, means_Lab, 																				\
+													[area], [diameter], [height], [width], 																			\
+													[dominant_HSV], 																								\
+													[rates_RGB[0]], [rates_RGB[1]], [rates_HSV[0]], 																\
+													[long_gradient], 																								\
+													[bcd], [cd], [dd], 																								\
+													means_diffs_full.flatten(), means_apex_equator_stalk.flatten(), mean_diffs_apex_equator_stalk_RGB.flatten(), 	\
+													means_n_RGB.flatten(), means_n_HSV.flatten(), means_n_Lab.flatten(),means_diffs_n_RGB.flatten(), 				\
+													means_diffs_n_HSV.flatten(), means_diffs_n_Lab.flatten()), axis=None))	
 
 		self.insert_feature_row(img_name, feature_values)
