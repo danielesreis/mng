@@ -12,3 +12,7 @@ real_repeated.csv
 results/
 predictions/
 ultimate_exp.xlsx
+plots/
+results_r2.csv
+results_rmse.csv
+imgs_tommy2/
