@@ -15,11 +15,11 @@ class MNGContour():
 		for contour in contours:
 			(x,y,w,h) = cv2.boundingRect(contour)
 
-			width_cond = w > 500 and w != img_w
-			height_cond = h > 400 and h != img_h
+			width_cond = w > 100 and w != img_w
+			height_cond = h > 100 and h != img_h
 
 			if height_cond and width_cond:
-				box_contour = contour
+				print(w,h)
 				break
 
 		min_x 			= x

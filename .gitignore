@@ -1,3 +1,4 @@
+TCC/
 imgs_tommy/
 preprocessadas/
 preprocessadas1/
@@ -16,3 +17,5 @@ plots/
 results_r2.csv
 results_rmse.csv
 imgs_tommy2/
+tikz data/
+stats_analysis/

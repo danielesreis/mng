@@ -28,11 +28,20 @@ class MNGFeaturesFractal():
 		return -coeffs[0]
 
 	def correlation_dimension(self, gray_img):
+		def otsu_thresholding():
+			__, mask 				= cv2.threshold(gray_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+			inv_mask				= cv2.bitwise_not(mask)
+			thr_img 				= cv2.bitwise_and(gray_img, gray_img, mask = inv_mask)
+			thr_img[thr_img == 0] 	= 255
+		
+			return thr_img
 
 		def heaviside_func(array, threshold):
 			return sum(array-threshold>=0)
 
-		data 				= gray_img.flatten()
+		img 				= otsu_thresholding()
+
+		data 				= img.flatten()
 		n_pixels 			= data.shape[0]
 		data_shifted 		= data[1:]
 		data 				= data[0:n_pixels-1]

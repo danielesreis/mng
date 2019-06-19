@@ -27,6 +27,7 @@ class MNGFeatures():
 						'apex_equator_B_diff', 'equator_stalk_B_diff', 'apex_stalk_B_diff']										\
 
 	def new_df(self):
+		return [self.current_features]
 		self.data = pd.DataFrame(index=self.image_names, columns=[self.current_features], dtype=np.float64)
 
 	def insert_feature_row(self, img_name, feature_values):
@@ -141,6 +142,7 @@ class MNGFeatures():
 		self.edit_feature_names()
 
 	def extract_features(self, BGR_img, img_name):
+		feature_values = []
 		gray_img = cv2.cvtColor(BGR_img, cv2.COLOR_BGR2GRAY)
 		
 		RGB_img = BGR_img[:,:,::-1]
